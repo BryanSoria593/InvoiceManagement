@@ -1,0 +1,30 @@
+# .gitignore for Visual Studio, .NET, and common tools
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+.vs/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# DotCover
+*.dotCover
+
+# Logs
+*.log
+
+# NPM packages
+node_modules/
+
+# Docker
+**/docker-compose.override.yml
+**/docker-compose.yml
