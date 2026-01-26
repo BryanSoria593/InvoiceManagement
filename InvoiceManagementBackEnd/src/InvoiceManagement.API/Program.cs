@@ -1,19 +1,13 @@
-using InvoiceManagement.Domain.Users.Interfaces;
-using InvoiceManagement.Infrastructure.Repositories;
-using InvoiceManagement.Application.Users;
-using InvoiceManagement.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+using InvoiceManagement.Infrastructure;
+using InvoiceManagement.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<InvoiceManagementDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserAppService, UserAppService>();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
@@ -23,7 +17,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.MapControllers();
 
 app.Run();
