@@ -22,4 +22,34 @@ public class CustomersController : ControllerBase
         var customers = _customerAppService.GetAllCustomers();
         return Ok(customers);
     }
+
+    [HttpGet("{id}")]
+    public ActionResult<CustomerDto> GetById(int id)
+    {
+        var customer = _customerAppService.GetCustomerById(id);
+        if (customer == null)
+            return NotFound();
+        return Ok(customer);
+    }
+
+    [HttpPost]
+    public ActionResult<CustomerDto> Create([FromBody] CreateCustomerDto dto)
+    {
+        var customer = _customerAppService.CreateCustomer(dto);
+        return Ok(customer);
+    }
+
+    [HttpPut]
+    public ActionResult<CustomerDto> Update([FromBody] UpdateCustomerDto dto)
+    {
+        var customer = _customerAppService.UpdateCustomer(dto);
+        return Ok(customer);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _customerAppService.DeleteCustomer(id);
+        return NoContent();
+    }
 }
