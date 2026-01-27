@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using InvoiceManagement.Infrastructure.Persistence;
 using InvoiceManagement.Infrastructure.Repositories;
 using InvoiceManagement.Domain.Users.Interfaces;
+using InvoiceManagement.Domain.Products.Interfaces;
 
 namespace InvoiceManagement.Infrastructure;
 
@@ -14,8 +15,9 @@ public static class DependencyInjection
         services.AddDbContext<InvoiceManagementDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-        // User Repositories
         services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddScoped<IProductRepository, ProductRepository>();
 
         return services;
     }
