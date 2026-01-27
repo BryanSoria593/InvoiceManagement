@@ -17,4 +17,5 @@ public class InvoiceDetail
 
     public Invoice? Invoice { get; set; }
     public Product? Product { get; set; }
+    public bool IsDeleted { get; set; }
 }
