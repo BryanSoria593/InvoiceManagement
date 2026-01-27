@@ -25,6 +25,7 @@ public static class DependencyInjection
 
         services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 
+        services.AddScoped<InvoiceManagement.Domain.Configuration.Interfaces.IConfigurationRepository, InvoiceManagement.Infrastructure.Repositories.ConfigurationRepository>();
         return services;
     }
 }
