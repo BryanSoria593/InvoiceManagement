@@ -14,6 +14,22 @@ namespace InvoiceManagement.Application.Users
             _userRepository = userRepository;
         }
 
+        public UserDto? GetUserById(int id)
+        {
+            var user = _userRepository.GetById(id);
+            if (user == null || user.IsDeleted)
+                return null;
+            return new UserDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.Username,
+                Email = user.Email,
+                Status = user.Status
+            };
+        }
+
         public List<UserDto> GetAllUsers()
         {
             var users = _userRepository.GetAll();

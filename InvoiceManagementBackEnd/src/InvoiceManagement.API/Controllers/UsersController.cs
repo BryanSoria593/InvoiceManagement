@@ -15,6 +15,15 @@ namespace InvoiceManagement.API.Controllers
             _userAppService = userAppService;
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<UserDto> GetById(int id)
+        {
+            var user = _userAppService.GetUserById(id);
+            if (user == null)
+                return NotFound();
+            return Ok(user);
+        }
+
         [HttpGet]
         public ActionResult<List<UserDto>> Get()
         {

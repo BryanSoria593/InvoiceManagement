@@ -13,6 +13,11 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public User? GetById(int id)
+    {
+        return _context.Users.FirstOrDefault(u => u.Id == id);
+    }
+
     public List<User> GetAll()
     {
         return _context.Users.ToList();
