@@ -1,14 +1,11 @@
 using InvoiceManagement.Domain.Products.Enums;
 
 namespace InvoiceManagement.Application.Products.Dtos;
-public class ProductDto
+public class CreateProductDto
 {
-    public int Id { get; set; }
     public string Code { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public decimal SalePrice { get; set; }
     public ProductStatus Status { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
 }

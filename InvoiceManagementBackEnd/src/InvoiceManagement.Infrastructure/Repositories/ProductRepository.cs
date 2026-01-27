@@ -3,34 +3,49 @@ using InvoiceManagement.Domain.Products.Enums;
 using InvoiceManagement.Domain.Products.Interfaces;
 
 namespace InvoiceManagement.Infrastructure.Repositories;
+using InvoiceManagement.Infrastructure.Persistence;
+
 public class ProductRepository : IProductRepository
 {
+    private readonly InvoiceManagementDbContext _context;
+
+    public ProductRepository(InvoiceManagementDbContext context)
+    {
+        _context = context;
+    }
+
     public List<Product> GetAll()
     {
-        return new List<Product>
+        return _context.Products.ToList();
+    }
+
+    public Product? GetById(int id)
+    {
+        return _context.Products.FirstOrDefault(p => p.Id == id);
+    }
+
+    public void Add(Product product)
+    {
+        _context.Products.Add(product);
+        _context.SaveChanges();
+    }
+
+    public void Update(Product product)
+    {
+        product.UpdatedAt = DateTime.UtcNow;
+        _context.Products.Update(product);
+        _context.SaveChanges();
+    }
+
+    public void Delete(int id)
+    {
+        var product = _context.Products.FirstOrDefault(p => p.Id == id);
+        if (product != null)
         {
-            new Product
-            {
-                Id = 1,
-                Code = "P001",
-                Name = "Product 1",
-                Description = "Description for Product 1",
-                SalePrice = 100.00m,
-                Status = ProductStatus.Active,
-                CreatedAt = System.DateTime.UtcNow,
-                UpdatedAt = System.DateTime.UtcNow
-            },
-            new Product
-            {
-                Id = 2,
-                Code = "P002",
-                Name = "Product 2",
-                Description = "Description for Product 2",
-                SalePrice = 200.00m,
-                Status = ProductStatus.Inactive,
-                CreatedAt = System.DateTime.UtcNow,
-                UpdatedAt = System.DateTime.UtcNow
-            }
-        };
+            product.IsDeleted = true;
+            product.UpdatedAt = DateTime.UtcNow;
+            _context.Products.Update(product);
+            _context.SaveChanges();
+        }
     }
 }

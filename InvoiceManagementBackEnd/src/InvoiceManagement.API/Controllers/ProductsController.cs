@@ -21,4 +21,34 @@ public class ProductsController : ControllerBase
         var products = _productAppService.GetAllProducts();
         return Ok(products);
     }
+
+    [HttpGet("{id}")]
+    public ActionResult<ProductDto> GetById(int id)
+    {
+        var product = _productAppService.GetProductById(id);
+        if (product == null)
+            return NotFound();
+        return Ok(product);
+    }
+
+    [HttpPost]
+    public ActionResult<ProductDto> Create([FromBody] CreateProductDto dto)
+    {
+        var product = _productAppService.CreateProduct(dto);
+        return Ok(product);
+    }
+
+    [HttpPut]
+    public ActionResult<ProductDto> Update([FromBody] UpdateProductDto dto)
+    {
+        var product = _productAppService.UpdateProduct(dto);
+        return Ok(product);
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        _productAppService.DeleteProduct(id);
+        return NoContent();
+    }
 }
