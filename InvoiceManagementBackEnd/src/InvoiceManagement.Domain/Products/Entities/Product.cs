@@ -12,6 +12,6 @@ public class Product
     public decimal SalePrice { get; set; }
     public ProductStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
 }
