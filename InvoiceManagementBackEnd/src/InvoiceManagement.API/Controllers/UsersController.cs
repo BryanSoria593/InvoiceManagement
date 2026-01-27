@@ -35,5 +35,12 @@ namespace InvoiceManagement.API.Controllers
             var user = _userAppService.UpdateUser(dto);
             return Ok(user);
         }
+
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            _userAppService.DeleteUser(id);
+            return NoContent();
+        }
     }
 }

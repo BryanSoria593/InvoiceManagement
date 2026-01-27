@@ -30,4 +30,16 @@ public class UserRepository : IUserRepository
         _context.Users.Update(user);
         _context.SaveChanges();
     }
+
+    public void Delete(int id)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Id == id);
+        if (user != null)
+        {
+            user.IsDeleted = true;
+            user.UpdatedAt = DateTime.UtcNow;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
+    }
 }

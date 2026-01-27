@@ -78,5 +78,10 @@ namespace InvoiceManagement.Application.Users
                 Status = user.Status
             };
         }
+
+        public void DeleteUser(int id)
+        {
+            _userRepository.Delete(id);
+        }
     }
 }
