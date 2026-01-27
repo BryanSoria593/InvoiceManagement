@@ -2,6 +2,8 @@ using InvoiceManagement.Application.Configuration.Interfaces;
 using InvoiceManagement.Application.Configuration.Services;
 using InvoiceManagement.Application.Customers.Interfaces;
 using InvoiceManagement.Application.Customers.Services;
+using InvoiceManagement.Application.Invoices.Interfaces;
+using InvoiceManagement.Application.Invoices.Services;
 using InvoiceManagement.Application.PaymentMethods.Interfaces;
 using InvoiceManagement.Application.PaymentMethods.Services;
 using InvoiceManagement.Application.Products.Interfaces;
@@ -20,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<ICustomerAppService, CustomerAppService>();
         services.AddScoped<IPaymentMethodAppService, PaymentMethodAppService>();
         services.AddScoped<IConfigurationAppService, ConfigurationAppService>();
+        services.AddScoped<IInvoiceAppService, InvoiceAppService>();
         return services;
     }
 }
