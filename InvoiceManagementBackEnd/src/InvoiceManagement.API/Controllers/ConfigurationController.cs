@@ -16,9 +16,17 @@ public class ConfigurationController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<ConfigurationDto> Get()
+    public ActionResult<List<ConfigurationDto>> GetAll()
     {
-        var config = _configurationAppService.GetConfiguration();
+        var configs = _configurationAppService.GetAllConfigurations();
+        return Ok(configs);
+    }
+
+    [HttpPut]
+    public ActionResult<ConfigurationDto> Update([FromBody] UpdateConfigurationDto dto)
+    {
+        var config = _configurationAppService.UpdateConfiguration(dto);
         return Ok(config);
     }
+
 }

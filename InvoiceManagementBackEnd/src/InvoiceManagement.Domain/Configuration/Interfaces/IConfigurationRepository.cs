@@ -3,5 +3,6 @@ using ConfigEntity = InvoiceManagement.Domain.Configuration.Entities.Configurati
 namespace InvoiceManagement.Domain.Configuration.Interfaces;
 public interface IConfigurationRepository
 {
-    ConfigEntity? Get();
+    List<ConfigEntity> GetAll();
+    void Update(ConfigEntity configuration);
 }
