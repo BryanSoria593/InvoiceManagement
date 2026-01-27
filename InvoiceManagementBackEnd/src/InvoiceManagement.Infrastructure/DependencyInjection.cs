@@ -7,6 +7,7 @@ using InvoiceManagement.Domain.Users.Interfaces;
 using InvoiceManagement.Domain.Products.Interfaces;
 using InvoiceManagement.Domain.Customers.Interfaces;
 using InvoiceManagement.Domain.PaymentMethods.Interfaces;
+using InvoiceManagement.Domain.Configuration.Interfaces;
 
 namespace InvoiceManagement.Infrastructure;
 
@@ -25,7 +26,7 @@ public static class DependencyInjection
 
         services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 
-        services.AddScoped<InvoiceManagement.Domain.Configuration.Interfaces.IConfigurationRepository, InvoiceManagement.Infrastructure.Repositories.ConfigurationRepository>();
+        services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
         return services;
     }
 }
