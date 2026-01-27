@@ -23,4 +23,11 @@ public class UserRepository : IUserRepository
         _context.Users.Add(user);
         _context.SaveChanges();
     }
+
+    public void Update(User user)
+    {
+        user.UpdatedAt = DateTime.UtcNow;
+        _context.Users.Update(user);
+        _context.SaveChanges();
+    }
 }

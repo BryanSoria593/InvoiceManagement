@@ -6,4 +6,5 @@ public interface IUserAppService
 {
     public List<UserDto> GetAllUsers();
     public UserDto RegisterUser(RegisterUserDto dto);
+    public UserDto UpdateUser(UpdateUserDto dto);
 }

@@ -6,4 +6,5 @@ public interface IUserRepository
 {
     List<User> GetAll();
     void Add(User user);
+    void Update(User user);
 }

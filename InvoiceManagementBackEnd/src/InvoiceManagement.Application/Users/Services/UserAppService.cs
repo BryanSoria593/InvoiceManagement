@@ -52,5 +52,31 @@ namespace InvoiceManagement.Application.Users
                 Status = user.Status
             };
         }
+
+        public UserDto UpdateUser(UpdateUserDto dto)
+        {
+            var user = _userRepository.GetAll().FirstOrDefault(u => u.Id == dto.Id);
+            if (user == null)
+                throw new Exception("Usuario no encontrado");
+
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.Username = dto.Username;
+            user.Email = dto.Email;
+            if (!string.IsNullOrEmpty(dto.Password))
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            }
+            _userRepository.Update(user);
+            return new UserDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.Username,
+                Email = user.Email,
+                Status = user.Status
+            };
+        }
     }
 }
