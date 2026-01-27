@@ -27,5 +27,30 @@ namespace InvoiceManagement.Application.Users
                 Status = u.Status
             }).ToList();
         }
+
+        public UserDto RegisterUser(RegisterUserDto dto)
+        {
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            var user = new User
+            {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Username = dto.Username,
+                Email = dto.Email,
+                Password = hashedPassword,
+                CreatedAt = DateTime.UtcNow,
+                Status = UserStatus.Active
+            };
+            _userRepository.Add(user);
+            return new UserDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.Username,
+                Email = user.Email,
+                Status = user.Status
+            };
+        }
     }
 }

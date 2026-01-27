@@ -21,5 +21,12 @@ namespace InvoiceManagement.API.Controllers
             var users = _userAppService.GetAllUsers();
             return Ok(users);
         }
+
+        [HttpPost("register")]
+        public ActionResult<UserDto> Register([FromBody] RegisterUserDto dto)
+        {
+            var user = _userAppService.RegisterUser(dto);
+            return Ok(user);
+        }
     }
 }
