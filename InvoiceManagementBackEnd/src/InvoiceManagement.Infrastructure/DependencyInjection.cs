@@ -5,6 +5,7 @@ using InvoiceManagement.Infrastructure.Persistence;
 using InvoiceManagement.Infrastructure.Repositories;
 using InvoiceManagement.Domain.Users.Interfaces;
 using InvoiceManagement.Domain.Products.Interfaces;
+using InvoiceManagement.Domain.Customers.Interfaces;
 
 namespace InvoiceManagement.Infrastructure;
 
@@ -18,6 +19,8 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddScoped<IProductRepository, ProductRepository>();
+
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
 
         return services;
     }
