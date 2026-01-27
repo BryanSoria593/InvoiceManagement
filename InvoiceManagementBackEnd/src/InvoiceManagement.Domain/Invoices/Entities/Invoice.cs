@@ -10,6 +10,7 @@ public class Invoice
     public int Id { get; set; }
     public DateTime Date { get; set; }
     public InvoiceStatus Status { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
     public decimal Total { get; set; }
     public string? Observations { get; set; }
     public bool IsDeleted { get; set; }
@@ -24,5 +25,7 @@ public class Invoice
 
     public int PaymentMethodId { get; set; }
     public PaymentMethod? PaymentMethod { get; set; }
+
+    public ICollection<InvoiceDetail>? InvoiceDetails { get; set; }
 
 }

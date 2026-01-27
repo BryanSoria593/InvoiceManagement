@@ -30,7 +30,16 @@ public class InvoiceAppService : IInvoiceAppService
             Observations = i.Observations,
             IsDeleted = i.IsDeleted,
             CreatedAt = i.CreatedAt,
-            UpdatedAt = i.UpdatedAt
+            UpdatedAt = i.UpdatedAt,
+            Details = i.InvoiceDetails?.Select(d => new InvoiceDetailDto
+            {
+                Id = d.Id,
+                ProductId = d.ProductId,
+                Quantity = d.Quantity,
+                UnitPrice = d.UnitPrice,
+                Total = d.Total,
+                Description = d.Description
+            }).ToList()
         }).ToList();
     }
 }

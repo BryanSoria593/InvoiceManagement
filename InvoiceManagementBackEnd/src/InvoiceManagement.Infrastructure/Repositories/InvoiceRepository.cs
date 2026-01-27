@@ -22,7 +22,20 @@ public class InvoiceRepository : IInvoiceRepository
                 Observations = "",
                 IsDeleted = false,
                 CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow,
+                InvoiceDetails = new List<InvoiceDetail>
+                {
+                    new InvoiceDetail
+                    {
+                        Id = 1,
+                        InvoiceId = 1,
+                        ProductId = 1,
+                        Quantity = 2,
+                        UnitPrice = 50.00m,
+                        Total = 100.00m,
+                        Description = "Producto de ejemplo"
+                    }
+                }
             }
         };
     }
