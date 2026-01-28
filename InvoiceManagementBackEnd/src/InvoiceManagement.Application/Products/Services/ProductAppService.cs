@@ -12,9 +12,9 @@ public class ProductAppService : IProductAppService
         _productRepository = productRepository;
     }
 
-    public List<ProductDto> GetAllProducts()
+    public List<ProductDto> GetProducts(int pageNumber, int pageSize)
     {
-        var products = _productRepository.GetAll();
+        var products = _productRepository.GetAll(pageNumber, pageSize);
         return products.Select(p => new ProductDto
         {
             Id = p.Id,

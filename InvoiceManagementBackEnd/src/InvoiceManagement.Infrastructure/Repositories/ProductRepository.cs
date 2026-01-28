@@ -14,9 +14,14 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public List<Product> GetAll()
+    public List<Product> GetAll(int pageNumber, int pageSize)
     {
-        return _context.Products.Where(p => !p.IsDeleted).ToList();
+        return _context.Products
+            .Where(p => !p.IsDeleted)
+            .OrderBy(p => p.Id)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
     }
 
     public Product? GetById(int id)
