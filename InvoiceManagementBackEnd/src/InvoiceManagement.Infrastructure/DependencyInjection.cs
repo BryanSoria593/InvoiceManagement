@@ -9,6 +9,9 @@ using InvoiceManagement.Domain.Customers.Interfaces;
 using InvoiceManagement.Domain.PaymentMethods.Interfaces;
 using InvoiceManagement.Domain.Configuration.Interfaces;
 using InvoiceManagement.Domain.Invoices.Interfaces;
+using InvoiceManagement.Application.Auth.Interfaces;
+using InvoiceManagement.Application.Auth.Services;
+using InvoiceManagement.Infrastructure.Auth;
 
 namespace InvoiceManagement.Infrastructure;
 
@@ -30,6 +33,9 @@ public static class DependencyInjection
         services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
 
         services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         return services;
     }
 }

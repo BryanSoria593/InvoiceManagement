@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using InvoiceManagement.Application.Products.Interfaces;
 using InvoiceManagement.Application.Products.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InvoiceManagement.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase

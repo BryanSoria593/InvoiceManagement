@@ -8,7 +8,7 @@
       "applicationUrl": "http://localhost:5055",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "JWT_SECRET": "R7!qZ@3mK9#Lx2$A"
+        "JWT_SECRET": "R7!qZ@3mK9#Lx2$A8vB5!nT4#sW1$eH7pL0!zQ2#xC9"
       }
     },
     "https": {
@@ -18,7 +18,7 @@
       "applicationUrl": "https://localhost:7109;http://localhost:5055",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "JWT_SECRET": "R7!qZ@3mK9#Lx2$A"
+        "JWT_SECRET": "R7!qZ@3mK9#Lx2$A8vB5!nT4#sW1$eH7pL0!zQ2#xC9"
       }
     }
   }
