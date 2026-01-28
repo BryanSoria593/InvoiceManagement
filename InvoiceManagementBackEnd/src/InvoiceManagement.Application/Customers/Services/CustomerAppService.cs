@@ -103,6 +103,10 @@ public class CustomerAppService : ICustomerAppService
 
     public void DeleteCustomer(int id)
     {
-        _customerRepository.Delete(id);
+        var customer = _customerRepository.GetById(id);
+        if (customer == null || customer.IsDeleted) return;
+        customer.IsDeleted = true;
+        customer.UpdatedAt = DateTime.UtcNow;
+        _customerRepository.Update(customer);
     }
 }

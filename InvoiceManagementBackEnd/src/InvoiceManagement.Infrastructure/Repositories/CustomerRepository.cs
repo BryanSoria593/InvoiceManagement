@@ -33,20 +33,8 @@ public class CustomerRepository : ICustomerRepository
 
     public void Update(Customer customer)
     {
-        customer.UpdatedAt = DateTime.UtcNow;
         _context.Customers.Update(customer);
         _context.SaveChanges();
     }
 
-    public void Delete(int id)
-    {
-        var customer = _context.Customers.FirstOrDefault(c => c.Id == id);
-        if (customer != null)
-        {
-            customer.IsDeleted = true;
-            customer.UpdatedAt = DateTime.UtcNow;
-            _context.Customers.Update(customer);
-            _context.SaveChanges();
-        }
-    }
 }
