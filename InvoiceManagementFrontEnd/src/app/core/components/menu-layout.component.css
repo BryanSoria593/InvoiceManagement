@@ -1,0 +1,23 @@
+.sidenav-container {
+  height: 100vh;
+}
+.sidenav {
+  width: 220px;
+  background: #3949ab;
+  color: #fff;
+}
+mat-toolbar {
+  background: #3949ab;
+  color: #fff;
+}
+mat-icon {
+  margin-right: 16px;
+}
+.active {
+  background: #e3f0ff !important;
+  color: #1976d2 !important;
+}
+mat-list-item {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
