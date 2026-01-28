@@ -1,0 +1,23 @@
+.dashboard-container {
+  max-width: 320px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 24px 0;
+}
+
+mat-icon {
+  margin-right: 16px;
+  color: #1976d2;
+}
+
+.active {
+  background: #e3f0ff !important;
+  color: #1976d2 !important;
+}
+
+mat-list-item {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
