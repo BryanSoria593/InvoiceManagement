@@ -79,6 +79,7 @@ namespace InvoiceManagement.Application.Users
             user.LastName = dto.LastName;
             user.Username = dto.Username;
             user.Email = dto.Email;
+            user.UpdatedAt = DateTime.UtcNow;
             if (!string.IsNullOrEmpty(dto.Password))
             {
                 user.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
@@ -97,7 +98,11 @@ namespace InvoiceManagement.Application.Users
 
         public void DeleteUser(int id)
         {
-            _userRepository.Delete(id);
+            var user = _userRepository.GetById(id);
+            if (user == null) return;
+            user.IsDeleted = true;
+            user.UpdatedAt = DateTime.UtcNow;
+            _userRepository.Update(user);
         }
     }
 }
