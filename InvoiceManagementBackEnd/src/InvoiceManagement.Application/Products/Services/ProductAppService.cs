@@ -81,6 +81,7 @@ public class ProductAppService : IProductAppService
         product.Description = dto.Description;
         product.SalePrice = dto.SalePrice;
         product.Status = dto.Status;
+        product.UpdatedAt = DateTime.UtcNow;
         _productRepository.Update(product);
         return new ProductDto
         {
@@ -97,6 +98,10 @@ public class ProductAppService : IProductAppService
 
     public void DeleteProduct(int id)
     {
-        _productRepository.Delete(id);
+        var product = _productRepository.GetById(id);
+        if (product == null || product.IsDeleted) return;
+        product.IsDeleted = true;
+        product.UpdatedAt = DateTime.UtcNow;
+        _productRepository.Update(product);
     }
 }
