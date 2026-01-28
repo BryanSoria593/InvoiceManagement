@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using InvoiceManagement.Application.Configuration.Interfaces;
 using InvoiceManagement.Application.Configuration.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InvoiceManagement.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ConfigurationController : ControllerBase
