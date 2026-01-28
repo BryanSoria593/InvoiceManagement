@@ -5,7 +5,7 @@
       <p class="subtitle">Inicia sesión para continuar</p>
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="email" type="email" required>
+        <input matInput formControlName="email" type="email" required autocomplete="username">
         @if (loginForm.get('email')?.hasError('required')) {
           <mat-error>El email es obligatorio</mat-error>
         }
@@ -16,7 +16,7 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Contraseña</mat-label>
-        <input matInput formControlName="password" type="password" required>
+        <input matInput formControlName="password" type="password" required autocomplete="current-password">
         @if (loginForm.get('password')?.hasError('required')) {
           <mat-error>La contraseña es obligatoria</mat-error>
         }
