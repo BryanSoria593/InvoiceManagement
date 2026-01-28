@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ProductsService } from './products.service';
 import { Product, ProductStatus } from './product.model';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,6 +27,10 @@ export class ProductsComponent implements OnInit {
   displayedColumns: string[] = ['code', 'name', 'status', 'createdAt', 'salePrice', 'actions'];
   dataSource = new MatTableDataSource<Product>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  pageSize = 10;
+  pageSizeOptions: number[] = [5, 10, 20, 50];
+  pageIndex = 0;
+  total = 0;
 
   constructor(private productsService: ProductsService) {}
 
@@ -34,10 +38,17 @@ export class ProductsComponent implements OnInit {
     this.loadProducts();
   }
 
-  loadProducts(): void {
-    this.productsService.getAll().subscribe(products => {
-      this.dataSource.data = products;
-      this.dataSource.paginator = this.paginator;
+  loadProducts(event?: PageEvent): void {
+    const pageIndex = event ? event.pageIndex : this.pageIndex;
+    const pageSize = event ? event.pageSize : this.pageSize;
+    this.productsService.getPaged(pageIndex + 1, pageSize).subscribe({
+      next: (result) => {
+        this.dataSource.data = result.items;
+        this.total = result.totalCount;
+      },
+      error: (err) => {
+        console.error('Error al cargar productos', err);
+      }
     });
   }
 
@@ -55,5 +66,11 @@ export class ProductsComponent implements OnInit {
 
   getStatusLabel(status: ProductStatus): string {
     return status === ProductStatus.Active ? 'Activo' : 'Inactivo';
+  }
+
+  onPage(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.loadProducts(event);
   }
 }

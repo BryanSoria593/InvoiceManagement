@@ -1,16 +1,22 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from './product.model';
+import { environment } from '../../../environments/environments';
+import { PagedResult } from '../../shared/models/paged-result.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsService {
-  private readonly apiUrl = '/api/products';
+    private readonly http = inject(HttpClient);
+    private readonly apiUrl = `${environment.baseUrl}/products`;
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
-  getAll(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl);
+
+  getPaged(pageNumber: number, pageSize: number): Observable<PagedResult<Product>> {
+    return this.http.get<PagedResult<Product>>(`${this.apiUrl}`, {
+      params: { pageNumber, pageSize }
+    });
   }
 
   getById(id: number): Observable<Product> {
