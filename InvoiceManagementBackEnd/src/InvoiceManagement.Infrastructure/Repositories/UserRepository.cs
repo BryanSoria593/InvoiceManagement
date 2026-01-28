@@ -15,12 +15,12 @@ public class UserRepository : IUserRepository
 
     public User? GetById(int id)
     {
-        return _context.Users.FirstOrDefault(u => u.Id == id);
+        return _context.Users.FirstOrDefault(u => u.Id == id && !u.IsDeleted);
     }
 
     public List<User> GetAll()
     {
-        return _context.Users.ToList();
+        return _context.Users.Where(u => !u.IsDeleted).ToList();
     }
 
     public void Add(User user)

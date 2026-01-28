@@ -16,12 +16,12 @@ public class ProductRepository : IProductRepository
 
     public List<Product> GetAll()
     {
-        return _context.Products.ToList();
+        return _context.Products.Where(p => !p.IsDeleted).ToList();
     }
 
     public Product? GetById(int id)
     {
-        return _context.Products.FirstOrDefault(p => p.Id == id);
+        return _context.Products.FirstOrDefault(p => p.Id == id && !p.IsDeleted);
     }
 
     public void Add(Product product)

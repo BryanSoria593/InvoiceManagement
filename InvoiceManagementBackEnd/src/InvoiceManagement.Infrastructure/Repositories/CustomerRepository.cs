@@ -17,12 +17,12 @@ public class CustomerRepository : ICustomerRepository
 
     public List<Customer> GetAll()
     {
-        return _context.Customers.ToList();
+        return _context.Customers.Where(c => !c.IsDeleted).ToList();
     }
 
     public Customer? GetById(int id)
     {
-        return _context.Customers.FirstOrDefault(c => c.Id == id);
+        return _context.Customers.FirstOrDefault(c => c.Id == id && !c.IsDeleted);
     }
 
     public void Add(Customer customer)

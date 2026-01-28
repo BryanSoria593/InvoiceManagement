@@ -14,6 +14,6 @@ public class PaymentMethodRepository : IPaymentMethodRepository
 
     public List<PaymentMethod> GetAll()
     {
-        return _context.PaymentMethods.ToList();
+        return _context.PaymentMethods.Where(pm => !pm.IsDeleted).ToList();
     }
 }
