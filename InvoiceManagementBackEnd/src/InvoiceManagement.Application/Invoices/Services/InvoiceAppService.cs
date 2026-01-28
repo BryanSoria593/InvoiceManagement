@@ -18,7 +18,113 @@ public class InvoiceAppService : IInvoiceAppService
     public List<InvoiceDto> GetAllInvoices()
     {
         var invoices = _invoiceRepository.GetAll();
-        return invoices.Select(i => new InvoiceDto
+        return invoices.Select(MapToDto).ToList();
+    }
+
+    public InvoiceDto? GetInvoiceById(int id)
+    {
+        var invoice = _invoiceRepository.GetById(id);
+        return invoice == null ? null : MapToDto(invoice);
+    }
+
+    public InvoiceDto CreateInvoice(CreateInvoiceDto dto)
+    {
+        var invoice = new Invoice
+        {
+            CustomerId = dto.CustomerId,
+            UserId = dto.UserId,
+            Date = dto.Date,
+            PaymentMethodId = dto.PaymentMethodId,
+            Status = Domain.Invoices.Enums.InvoiceStatus.Pending,
+            Total = dto.Details.Sum(d => d.Quantity * d.UnitPrice),
+            Observations = dto.Observations,
+            IsDeleted = false,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            InvoiceDetails = dto.Details.Select(d => new InvoiceDetail
+            {
+                ProductId = d.ProductId,
+                Quantity = d.Quantity,
+                UnitPrice = d.UnitPrice,
+                Total = d.Quantity * d.UnitPrice,
+                Description = d.Description,
+                IsDeleted = false
+            }).ToList()
+        };
+        _invoiceRepository.Add(invoice);
+        return MapToDto(invoice);
+    }
+
+    public InvoiceDto UpdateInvoice(UpdateInvoiceDto dto)
+    {
+        var invoice = _invoiceRepository.GetById(dto.Id);
+        if (invoice == null) throw new Exception($"Invoice with Id {dto.Id} not found");
+        invoice.CustomerId = dto.CustomerId;
+        invoice.UserId = dto.UserId;
+        invoice.Date = dto.Date;
+        invoice.PaymentMethodId = dto.PaymentMethodId;
+        invoice.Observations = dto.Observations;
+        invoice.UpdatedAt = DateTime.UtcNow;
+
+        var dtoDetailIds = dto.Details.Select(d => d.Id).ToHashSet();
+        foreach (var detail in invoice.InvoiceDetails.ToList())
+        {
+            if (!dtoDetailIds.Contains(detail.Id))
+            {
+                detail.IsDeleted = true;
+            }
+        }
+
+        foreach (var dtoDetail in dto.Details)
+        {
+            var existingDetail = invoice.InvoiceDetails.FirstOrDefault(d => d.Id == dtoDetail.Id);
+            if (existingDetail != null)
+            {
+                existingDetail.ProductId = dtoDetail.ProductId;
+                existingDetail.Quantity = dtoDetail.Quantity;
+                existingDetail.UnitPrice = dtoDetail.UnitPrice;
+                existingDetail.Total = dtoDetail.Quantity * dtoDetail.UnitPrice;
+                existingDetail.Description = dtoDetail.Description;
+                existingDetail.IsDeleted = false;
+            }
+            else
+            {
+                invoice.InvoiceDetails.Add(new InvoiceDetail
+                {
+                    ProductId = dtoDetail.ProductId,
+                    Quantity = dtoDetail.Quantity,
+                    UnitPrice = dtoDetail.UnitPrice,
+                    Total = dtoDetail.Quantity * dtoDetail.UnitPrice,
+                    Description = dtoDetail.Description,
+                    InvoiceId = invoice.Id,
+                    IsDeleted = false
+                });
+            }
+        }
+
+        invoice.Total = invoice.InvoiceDetails.Where(x => !x.IsDeleted).Sum(x => x.Total);
+        _invoiceRepository.Update(invoice);
+        return MapToDto(invoice);
+    }
+
+    public void DeleteInvoice(int id)
+    {
+        var invoice = _invoiceRepository.GetById(id);
+        if (invoice == null) return;
+        invoice.IsDeleted = true;
+        if (invoice.InvoiceDetails != null)
+        {
+            foreach (var detail in invoice.InvoiceDetails)
+            {
+                detail.IsDeleted = true;
+            }
+        }
+        _invoiceRepository.Update(invoice);
+    }
+
+    private InvoiceDto MapToDto(Invoice i)
+    {
+        return new InvoiceDto
         {
             Id = i.Id,
             CustomerId = i.CustomerId,
@@ -30,8 +136,8 @@ public class InvoiceAppService : IInvoiceAppService
             Observations = i.Observations,
             IsDeleted = i.IsDeleted,
             CreatedAt = i.CreatedAt,
-            UpdatedAt = i.UpdatedAt,
-            Details = i.InvoiceDetails?.Select(d => new InvoiceDetailDto
+            UpdatedAt = i.UpdatedAt ?? null,
+            Details = i.InvoiceDetails?.Where(d => !d.IsDeleted).Select(d => new InvoiceDetailDto
             {
                 Id = d.Id,
                 ProductId = d.ProductId,
@@ -39,7 +145,7 @@ public class InvoiceAppService : IInvoiceAppService
                 UnitPrice = d.UnitPrice,
                 Total = d.Total,
                 Description = d.Description
-            }).ToList()
-        }).ToList();
+            }).ToList() ?? new List<InvoiceDetailDto>()
+        };
     }
 }

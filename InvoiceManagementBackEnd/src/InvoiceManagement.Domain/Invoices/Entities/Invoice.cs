@@ -15,7 +15,7 @@ public class Invoice
     public string? Observations { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public int CustomerId { get; set; }
     public Customer? Customer { get; set; }

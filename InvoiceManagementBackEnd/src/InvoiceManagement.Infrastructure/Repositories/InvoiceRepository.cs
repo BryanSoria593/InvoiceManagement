@@ -2,41 +2,44 @@ using System.Collections.Generic;
 using InvoiceManagement.Domain.Invoices.Entities;
 using InvoiceManagement.Domain.Invoices.Enums;
 using InvoiceManagement.Domain.Invoices.Interfaces;
+using InvoiceManagement.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvoiceManagement.Infrastructure.Repositories;
 public class InvoiceRepository : IInvoiceRepository
 {
+    private readonly InvoiceManagementDbContext _context;
+
+    public InvoiceRepository(InvoiceManagementDbContext context)
+    {
+        _context = context;
+    }
+
     public List<Invoice> GetAll()
     {
-        return new List<Invoice>
-        {
-            new Invoice
-            {
-                Id = 1,
-                CustomerId = 1,
-                UserId = 1,
-                Date = DateTime.UtcNow,
-                PaymentMethodId = 1,
-                Status = InvoiceStatus.Paid,
-                Total = 100.00m,
-                Observations = "",
-                IsDeleted = false,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                InvoiceDetails = new List<InvoiceDetail>
-                {
-                    new InvoiceDetail
-                    {
-                        Id = 1,
-                        InvoiceId = 1,
-                        ProductId = 1,
-                        Quantity = 2,
-                        UnitPrice = 50.00m,
-                        Total = 100.00m,
-                        Description = "Producto de ejemplo"
-                    }
-                }
-            }
-        };
+        return _context.Invoices
+            .Where(i => !i.IsDeleted)
+            .Include(i => i.InvoiceDetails)
+            .ToList();
     }
+
+    public Invoice? GetById(int id)
+    {
+        return _context.Invoices
+            .Include(i => i.InvoiceDetails)
+            .FirstOrDefault(i => i.Id == id && !i.IsDeleted);
+    }
+
+    public void Add(Invoice invoice)
+    {
+        _context.Invoices.Add(invoice);
+        _context.SaveChanges();
+    }
+
+    public void Update(Invoice invoice)
+    {
+        _context.Invoices.Update(invoice);
+        _context.SaveChanges();
+    }
+
 }
