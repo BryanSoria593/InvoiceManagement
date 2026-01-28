@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using InvoiceManagement.Application.Products.Interfaces;
 using InvoiceManagement.Application.Products.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using InvoiceManagement.Application.Common.Dtos;
 
 namespace InvoiceManagement.API.Controllers;
 
@@ -18,10 +19,10 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<ProductDto>> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public ActionResult<PagedResultDto<ProductDto>> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        var products = _productAppService.GetProducts(pageNumber, pageSize);
-        return Ok(products);
+        var result = _productAppService.GetProducts(pageNumber, pageSize);
+        return Ok(result);
     }
 
     [HttpGet("{id}")]

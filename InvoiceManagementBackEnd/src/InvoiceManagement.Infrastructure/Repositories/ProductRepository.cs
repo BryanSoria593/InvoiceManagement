@@ -24,6 +24,11 @@ public class ProductRepository : IProductRepository
             .ToList();
     }
 
+    public int GetTotalCount()
+    {
+        return _context.Products.Count(p => !p.IsDeleted);
+    }
+
     public Product? GetById(int id)
     {
         return _context.Products.FirstOrDefault(p => p.Id == id && !p.IsDeleted);

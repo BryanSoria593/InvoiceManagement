@@ -1,3 +1,4 @@
+using InvoiceManagement.Application.Common.Dtos;
 using InvoiceManagement.Application.Products.Dtos;
 using InvoiceManagement.Application.Products.Interfaces;
 using InvoiceManagement.Domain.Products.Interfaces;
@@ -12,10 +13,11 @@ public class ProductAppService : IProductAppService
         _productRepository = productRepository;
     }
 
-    public List<ProductDto> GetProducts(int pageNumber, int pageSize)
+    public PagedResultDto<ProductDto> GetProducts(int pageNumber, int pageSize)
     {
         var products = _productRepository.GetAll(pageNumber, pageSize);
-        return products.Select(p => new ProductDto
+        var total = _productRepository.GetTotalCount();
+        var items = products.Select(p => new ProductDto
         {
             Id = p.Id,
             Code = p.Code,
@@ -26,6 +28,7 @@ public class ProductAppService : IProductAppService
             CreatedAt = p.CreatedAt,
             UpdatedAt = p.UpdatedAt
         }).ToList();
+        return new PagedResultDto<ProductDto>(items, total);
     }
 
     public ProductDto? GetProductById(int id)
