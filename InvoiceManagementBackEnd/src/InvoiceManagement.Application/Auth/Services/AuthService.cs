@@ -17,7 +17,7 @@ public class AuthService : IAuthService
 
     public LoginResponseDto? Login(LoginRequestDto dto)
     {
-        var user = _userRepository.GetAll().FirstOrDefault(u => u.Username == dto.Username && !u.IsDeleted);
+        var user = _userRepository.GetAll().FirstOrDefault(u => u.Email == dto.Email && !u.IsDeleted);
         if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
             return null;
 
