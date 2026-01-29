@@ -26,6 +26,6 @@ public class Invoice
     public int PaymentMethodId { get; set; }
     public PaymentMethod? PaymentMethod { get; set; }
 
-    public ICollection<InvoiceDetail>? InvoiceDetails { get; set; }
+    public ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
 
 }
