@@ -18,6 +18,25 @@ public class CustomerAppService : ICustomerAppService
         _customerRepository = customerRepository;
     }
 
+    public List<CustomerDto> GetAllActiveCustomers()
+    {
+        var customers = _customerRepository.GetAll()
+            .Where(c => !c.IsDeleted && c.Status == Domain.Customers.Enums.CustomerStatus.Active)
+            .Select(c => new CustomerDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Phone = c.Phone,
+                Email = c.Email,
+                Address = c.Address,
+                CreatedAt = c.CreatedAt,
+                UpdatedAt = c.UpdatedAt,
+                Status = c.Status,
+                IsDeleted = c.IsDeleted
+            }).ToList();
+        return customers;
+    }
+
     public PagedResultDto<CustomerDto> GetCustomers(int pageNumber, int pageSize, string? filter = null)
     {
         var customers = _customerRepository.GetAll(pageNumber, pageSize, filter);

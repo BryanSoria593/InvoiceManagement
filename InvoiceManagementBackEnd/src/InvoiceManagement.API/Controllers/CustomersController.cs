@@ -17,6 +17,13 @@ public class CustomersController : ControllerBase
         _customerAppService = customerAppService;
     }
 
+    [HttpGet("all")]
+    public ActionResult<List<CustomerDto>> GetAll()
+    {
+        var customers = _customerAppService.GetAllActiveCustomers();
+        return Ok(customers);
+    }
+
     [HttpGet]
     public ActionResult<PagedResultDto<CustomerDto>> Get(
         [FromQuery] int pageNumber = 1,

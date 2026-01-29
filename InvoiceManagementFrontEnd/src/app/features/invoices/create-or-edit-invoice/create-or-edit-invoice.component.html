@@ -6,10 +6,19 @@
     <form [formGroup]="form">
       <div class="invoice-form-grid">
         <div class="form-row">
-          <mat-form-field class="w-100">
+        <mat-form-field class="w-100">
             <mat-label>Cliente</mat-label>
-            <input matInput placeholder="Selecciona un cliente" formControlName="customer" readonly>
-          </mat-form-field>
+                <mat-select
+                formControlName="customer"
+                (click)="onCustomerSelectOpen()"
+                >
+                @for (c of customers; track c.id) {
+                    <mat-option [value]="c.id">
+                    {{ c.name }}
+                    </mat-option>
+                }
+                </mat-select>
+        </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>Teléfono</mat-label>
             <input matInput formControlName="customerPhone" readonly>
