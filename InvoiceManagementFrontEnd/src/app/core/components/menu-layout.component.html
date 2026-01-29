@@ -8,6 +8,10 @@
       <a mat-list-item routerLink="/invoices" routerLinkActive="active"><mat-icon>receipt_long</mat-icon>Facturas</a>
       <a mat-list-item routerLink="/configuration" routerLinkActive="active"><mat-icon>settings</mat-icon>Configuración</a>
     </mat-nav-list>
+    <a mat-list-item (click)="logout()" style="margin-top: 24px; color: #e53935; font-weight: 500;">
+      <mat-icon style="margin-right: 12px;">logout</mat-icon>
+      <span>Cerrar sesión</span>
+    </a>
   </mat-sidenav>
   <mat-sidenav-content>
     <ng-content></ng-content>
