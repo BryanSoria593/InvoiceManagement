@@ -72,6 +72,7 @@ public class InvoiceRepository : IInvoiceRepository
     {
         return _context.Invoices
             .Include(i => i.Customer)
+            .Include(i => i.User)
             .Include(i => i.InvoiceDetails)
                 .ThenInclude(d => d.Product).Where(i => !i.IsDeleted)
             .FirstOrDefault(i => i.Id == id && !i.IsDeleted);

@@ -99,11 +99,6 @@ export class InvoicesComponent implements OnInit {
         this.router.navigate(['/invoices/create', invoice.id]);
     }
 
-    downloadInvoice(invoice: Invoice) {
-
-    }
-
-
     deleteInvoice(invoice: Invoice) {
         this.dialog.open(ConfirmDialogComponent, {
             data: {

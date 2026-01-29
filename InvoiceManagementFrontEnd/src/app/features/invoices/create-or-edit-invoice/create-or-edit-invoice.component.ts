@@ -94,8 +94,8 @@ export class CreateOrEditInvoiceComponent implements OnInit {
                 this.form.patchValue({
                     id: invoice.id,
                     customer: invoice.customerId,
-                    customerEmail : invoice.customerEmail,
-                    customerPhone : invoice.customerPhone,
+                    customerEmail: invoice.customerEmail,
+                    customerPhone: invoice.customerPhone,
                     customerId: invoice.customerId,
                     seller: invoice.userId,
                     userId: invoice.userId,
