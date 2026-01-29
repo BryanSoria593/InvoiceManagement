@@ -3,6 +3,13 @@
     <div class="invoice-form-header">
       <h2><mat-icon>add_circle</mat-icon> Nueva Factura</h2>
     </div>
+    <button mat-raised-button 
+              color="primary" 
+              type="button"
+              (click)="onSubmit()"
+              [disabled]="!form.valid">
+        <mat-icon>save</mat-icon> Guardar Factura
+      </button>
     <form [formGroup]="form">
       <div class="invoice-form-grid">
         <div class="form-row">
@@ -31,15 +38,24 @@
         <div class="form-row">
           <mat-form-field class="w-100">
             <mat-label>Vendedor</mat-label>
-            <input matInput formControlName="seller" readonly>
-          </mat-form-field>
+                <mat-select
+                formControlName="seller"
+                (click)="onUserSelectChange()"
+                >
+                @for (c of users; track c.id) {
+                    <mat-option [value]="c.id">
+                    {{ c.firstName }}
+                    </mat-option>
+                }
+                </mat-select>
+        </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>Fecha</mat-label>
             <input matInput formControlName="date" type="date">
           </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>Pago</mat-label>
-            <mat-select formControlName="paymentMethod">
+            <mat-select formControlName="paymentMethodId">
                 @for (method of paymentMethods; track method.id) {
                 <mat-option [value]="method.id">
                     {{ method.name }}
@@ -59,7 +75,7 @@
       <div class="invoice-actions-row">
         <button mat-stroked-button type="button"><mat-icon>add</mat-icon> Nuevo producto</button>
         <button mat-stroked-button type="button"><mat-icon>person_add</mat-icon> Nuevo cliente</button>
-        <button mat-stroked-button type="button"><mat-icon>playlist_add</mat-icon> Agregar productos</button>
+        <button mat-stroked-button type="button" (click)="onAddProduct()"><mat-icon>playlist_add</mat-icon> Agregar productos</button>
         <button mat-stroked-button type="button"><mat-icon>print</mat-icon> Imprimir</button>
       </div>
       <div class="invoice-table-section">
