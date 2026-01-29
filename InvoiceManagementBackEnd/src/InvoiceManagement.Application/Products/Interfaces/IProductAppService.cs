@@ -4,7 +4,7 @@ using InvoiceManagement.Application.Products.Dtos;
 namespace InvoiceManagement.Application.Products.Interfaces;
 public interface IProductAppService
 {
-    PagedResultDto<ProductDto> GetProducts(int pageNumber, int pageSize);
+    PagedResultDto<ProductDto> GetProducts(int pageNumber, int pageSize, string? filter = null);
     ProductDto? GetProductById(int id);
     ProductDto CreateProduct(CreateProductDto dto);
     ProductDto UpdateProduct(UpdateProductDto dto);

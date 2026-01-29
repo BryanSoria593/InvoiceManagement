@@ -13,10 +13,10 @@ public class ProductAppService : IProductAppService
         _productRepository = productRepository;
     }
 
-    public PagedResultDto<ProductDto> GetProducts(int pageNumber, int pageSize)
+    public PagedResultDto<ProductDto> GetProducts(int pageNumber, int pageSize, string? filter = null)
     {
-        var products = _productRepository.GetAll(pageNumber, pageSize);
-        var total = _productRepository.GetTotalCount();
+        var products = _productRepository.GetAll(pageNumber, pageSize, filter);
+        var total = _productRepository.GetTotalCount(filter);
         var items = products.Select(p => new ProductDto
         {
             Id = p.Id,

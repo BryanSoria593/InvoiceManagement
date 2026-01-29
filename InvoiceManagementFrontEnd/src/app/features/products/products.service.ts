@@ -13,10 +13,12 @@ export class ProductsService {
   constructor() {}
 
 
-  getPaged(pageNumber: number, pageSize: number): Observable<PagedResult<Product>> {
-    return this.http.get<PagedResult<Product>>(`${this.apiUrl}`, {
-      params: { pageNumber, pageSize }
-    });
+  getPaged(pageNumber: number, pageSize: number, filter?: string): Observable<PagedResult<Product>> {
+    const params: any = { pageNumber, pageSize };
+    if (filter) {
+      params.filter = filter;
+    }
+    return this.http.get<PagedResult<Product>>(`${this.apiUrl}`, { params });
   }
 
   getById(id: number): Observable<Product> {

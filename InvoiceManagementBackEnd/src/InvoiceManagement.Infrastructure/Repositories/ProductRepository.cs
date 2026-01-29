@@ -14,19 +14,36 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public List<Product> GetAll(int pageNumber, int pageSize)
+    public List<Product> GetAll(int pageNumber, int pageSize, string? filter = null)
     {
-        return _context.Products
-            .Where(p => !p.IsDeleted)
+        var query = _context.Products.Where(p => !p.IsDeleted);
+        if (!string.IsNullOrEmpty(filter))
+        {
+            query = query.Where(p =>
+                p.Name.Contains(filter) ||
+                p.Code.Contains(filter) ||
+                (p.Description != null && p.Description.Contains(filter))
+            );
+        }
+        return query
             .OrderBy(p => p.Id)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToList();
     }
 
-    public int GetTotalCount()
+    public int GetTotalCount(string? filter = null)
     {
-        return _context.Products.Count(p => !p.IsDeleted);
+        var query = _context.Products.Where(p => !p.IsDeleted);
+        if (!string.IsNullOrEmpty(filter))
+        {
+            query = query.Where(p =>
+                p.Name.Contains(filter) ||
+                p.Code.Contains(filter) ||
+                (p.Description != null && p.Description.Contains(filter))
+            );
+        }
+        return query.Count();
     }
 
     public Product? GetById(int id)

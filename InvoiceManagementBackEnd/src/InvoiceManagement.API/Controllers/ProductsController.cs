@@ -19,9 +19,12 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<PagedResultDto<ProductDto>> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    public ActionResult<PagedResultDto<ProductDto>> Get(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? filter = null)
     {
-        var result = _productAppService.GetProducts(pageNumber, pageSize);
+        var result = _productAppService.GetProducts(pageNumber, pageSize, filter);
         return Ok(result);
     }
 
