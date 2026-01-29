@@ -33,7 +33,7 @@ export class EditProductComponent {
   readonly readOnly = this.data.readOnly;
   readonly product = this.data.product;
 
-  ProductStatus = ProductStatus;
+  productStatus = ProductStatus;
   form = new FormGroup({
     code: new FormControl(this.product?.code ?? '', { nonNullable: true }),
     name: new FormControl(this.product?.name ?? '', { nonNullable: true, validators: Validators.required }),

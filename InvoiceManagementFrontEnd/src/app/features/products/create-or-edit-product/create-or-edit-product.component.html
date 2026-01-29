@@ -19,10 +19,10 @@
   <mat-form-field appearance="fill" class="w-100">
     <mat-label>Estado</mat-label>
     <mat-select formControlName="status" [disabled]="readOnly">
-      @for (key of (ProductStatus | keyvalue); track key.value) {
+      @for (key of (productStatus | keyvalue); track key.value) {
         @if (typeof key.value === 'number') {
           <mat-option [value]="key.value">
-            {{ key.value === ProductStatus.Active ? 'Activo' : 'Inactivo' }}
+            {{ key.value === productStatus.Active ? 'Activo' : 'Inactivo' }}
           </mat-option>
         }
       }
