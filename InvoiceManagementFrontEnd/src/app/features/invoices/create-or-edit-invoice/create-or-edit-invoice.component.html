@@ -97,6 +97,11 @@
                     <td>{{ detailCtrl.value.productName }}</td>
                     <td>{{ detailCtrl.value.unitPrice | currency:'USD':'symbol':'1.2-2' }}</td>
                     <td>{{ detailCtrl.value.total | currency:'USD':'symbol':'1.2-2' }}</td>
+                    <td>
+                        <button mat-icon-button color="warn" (click)="removeDetail($index)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
                 </tr>
             }
             @if (detailsArray.length > 0) {

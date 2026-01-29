@@ -129,6 +129,10 @@ export class CreateOrEditInvoiceComponent implements OnInit {
         };
     }
 
+    removeDetail(index: number) {
+        this.detailsArray.removeAt(index);
+    }
+
     private getConfiguration() {
         this.configurationService.get().subscribe(config => {
             this.vatPercentage = config.vatPercentage || 0;
