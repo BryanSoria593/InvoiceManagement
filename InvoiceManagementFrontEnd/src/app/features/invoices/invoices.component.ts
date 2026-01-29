@@ -10,6 +10,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { SearchFilterComponent } from '../../shared/components/search-filter/search-filter.component';
 import { debounceTime, Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-invoices',
@@ -37,6 +39,7 @@ export class InvoicesComponent implements OnInit {
     private filter$ = new Subject<string>();
     private service = inject(InvoicesService);
     private router = inject(Router);
+    private dialog = inject(MatDialog);
 
     constructor() {
         this.filter$
@@ -93,5 +96,27 @@ export class InvoicesComponent implements OnInit {
 
     downloadInvoice(invoice: any): void {
         console.log('Descargando factura', invoice.id);
+    }
+
+
+    deleteInvoice(invoice: Invoice) {
+        this.dialog.open(ConfirmDialogComponent, {
+            data: {
+                entity: 'Factura',
+                name: `#${invoice.id}`
+            },
+            width: '350px',
+            autoFocus: false
+        }).afterClosed().subscribe((result) => {
+            if (result === true) {
+                this.service
+                    .delete(invoice.id)
+                    .subscribe({
+                        next: () => {
+                            this.loadInvoices();
+                        }
+                    });
+            }
+        });
     }
 }
