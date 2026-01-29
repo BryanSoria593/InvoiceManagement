@@ -45,15 +45,29 @@ namespace InvoiceManagement.API.Controllers
         [HttpPost("register")]
         public ActionResult<UserDto> Register([FromBody] RegisterUserDto dto)
         {
-            var user = _userAppService.RegisterUser(dto);
-            return Ok(user);
+            try
+            {
+                var user = _userAppService.RegisterUser(dto);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpPut("update")]
         public ActionResult<UserDto> Update([FromBody] UpdateUserDto dto)
         {
-            var user = _userAppService.UpdateUser(dto);
-            return Ok(user);
+            try
+            {
+                var user = _userAppService.UpdateUser(dto);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
     }

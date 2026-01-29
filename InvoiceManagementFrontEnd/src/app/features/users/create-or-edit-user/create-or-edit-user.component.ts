@@ -50,7 +50,6 @@ export class CreateOrEditUserComponent {
     onSave() {
         if (this.form.valid) {
             const value = { ...this.user, ...this.form.value };
-            // Si está editando y el campo password está vacío, no lo envía
             if (this.user && !this.form.value.password) {
                 delete value.password;
             }

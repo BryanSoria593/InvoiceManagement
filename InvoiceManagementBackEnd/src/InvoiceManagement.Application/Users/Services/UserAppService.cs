@@ -63,6 +63,10 @@ namespace InvoiceManagement.Application.Users
 
         public UserDto RegisterUser(RegisterUserDto dto)
         {
+            var emailExists = _userRepository.GetAll().Any(u => u.Email == dto.Email && !u.IsDeleted);
+            if (emailExists)
+                throw new Exception("El correo electrónico ya está registrado.");
+
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
             var user = new User
             {
@@ -91,6 +95,10 @@ namespace InvoiceManagement.Application.Users
             var user = _userRepository.GetAll().FirstOrDefault(u => u.Id == dto.Id);
             if (user == null)
                 throw new Exception("Usuario no encontrado");
+
+            var emailExists = _userRepository.GetAll().Any(u => u.Email == dto.Email && u.Id != dto.Id && !u.IsDeleted);
+            if (emailExists)
+                throw new Exception("El correo electrónico ya está registrado por otro usuario.");
 
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
