@@ -100,7 +100,6 @@ export class CustomersComponent {
         });
         dialogRef.afterClosed().subscribe((created: Customer) => {
             if (created) {
-                console.log(created);
                 this.loading.set(true);
                 this.customersService.create(created).subscribe({
                     next: () => {
