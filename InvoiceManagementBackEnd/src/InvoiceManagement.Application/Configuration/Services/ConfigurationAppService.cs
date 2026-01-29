@@ -25,20 +25,7 @@ public class ConfigurationAppService : IConfigurationAppService
         if (config == null) return null;
 
         var dto = MapToDto(config);
-
-        if (!string.IsNullOrWhiteSpace(dto.LogoUrl))
-        {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", dto.LogoUrl.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString()));
-            if (File.Exists(filePath))
-            {
-                var bytes = File.ReadAllBytes(filePath);
-                var ext = Path.GetExtension(filePath).ToLower();
-                var mime = ext == ".png" ? "image/png" : ext == ".jpg" || ext == ".jpeg" ? "image/jpeg" : "application/octet-stream";
-                var base64 = Convert.ToBase64String(bytes);
-                dto.Base64LogoImage = $"data:{mime};base64,{base64}";
-            }
-        }
-
+        SetLogoBase64IfExists(dto);
         return dto;
     }
 
@@ -80,19 +67,7 @@ public class ConfigurationAppService : IConfigurationAppService
         _configurationRepository.Update(config);
 
         var result = MapToDto(config);
-
-        if (!string.IsNullOrWhiteSpace(result.LogoUrl))
-        {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", result.LogoUrl.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString()));
-            if (File.Exists(filePath))
-            {
-                var bytes = File.ReadAllBytes(filePath);
-                var ext = Path.GetExtension(filePath).ToLower();
-                var mime = ext == ".png" ? "image/png" : ext == ".jpg" || ext == ".jpeg" ? "image/jpeg" : "application/octet-stream";
-                var base64 = Convert.ToBase64String(bytes);
-                result.Base64LogoImage = $"data:{mime};base64,{base64}";
-            }
-        }
+        SetLogoBase64IfExists(result);
         return result;
     }
 
@@ -113,5 +88,33 @@ public class ConfigurationAppService : IConfigurationAppService
             LogoUrl = config.LogoUrl,
             UpdatedAt = config.UpdatedAt
         };
+    }
+
+    private static void SetLogoBase64IfExists(ConfigurationDto dto)
+    {
+        if (dto == null || string.IsNullOrWhiteSpace(dto.LogoUrl))
+            return;
+
+        var filePath = Path.Combine(
+            Directory.GetCurrentDirectory(),
+            "wwwroot",
+            dto.LogoUrl.TrimStart('/')
+                .Replace("/", Path.DirectorySeparatorChar.ToString())
+        );
+
+        if (!File.Exists(filePath))
+            return;
+
+        var bytes = File.ReadAllBytes(filePath);
+        var ext = Path.GetExtension(filePath).ToLower();
+
+        var mime = ext switch
+        {
+            ".png" => "image/png",
+            ".jpg" or ".jpeg" => "image/jpeg",
+            _ => "application/octet-stream"
+        };
+
+        dto.Base64LogoImage = $"data:{mime};base64,{Convert.ToBase64String(bytes)}";
     }
 }
