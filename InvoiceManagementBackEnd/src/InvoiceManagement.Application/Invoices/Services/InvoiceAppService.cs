@@ -45,7 +45,7 @@ public class InvoiceAppService : IInvoiceAppService
             Date = dto.Date,
             PaymentMethodId = dto.PaymentMethodId,
             Status = Domain.Invoices.Enums.InvoiceStatus.Pending,
-            Total = dto.Details.Sum(d => d.Quantity * d.UnitPrice),
+            Total = dto.Total,
             Observations = dto.Observations,
             IsDeleted = false,
             CreatedAt = DateTime.UtcNow,
@@ -55,7 +55,7 @@ public class InvoiceAppService : IInvoiceAppService
                 ProductId = d.ProductId,
                 Quantity = d.Quantity,
                 UnitPrice = d.UnitPrice,
-                Total = d.Quantity * d.UnitPrice,
+                Total = d.Total,
                 Description = d.Description,
                 IsDeleted = false
             }).ToList()

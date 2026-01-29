@@ -1,7 +1,7 @@
-import { Component, Inject, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormBuilder, FormGroup, FormArray, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,7 +11,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SearchFilterComponent } from '../../../shared/components/search-filter/search-filter.component';
-import { ProductsService } from '../../products/products.service';
 import { Subject, debounceTime } from 'rxjs';
 import { AppProductService } from '../../../core/services/app-product.service';
 import { Product } from '../../../core/models/product.model';
@@ -46,6 +45,7 @@ export class InvoiceProductDialogComponent {
     formArray = new FormArray<FormGroup<any>>([]);
     private productsService = inject(AppProductService);
     filter$ = new Subject<string>();
+    selectedDetails: any[] = [];
 
     constructor(
         public dialogRef: MatDialogRef<InvoiceProductDialogComponent>,
@@ -87,7 +87,6 @@ export class InvoiceProductDialogComponent {
         });
     }
 
-    // Métodos helper para obtener los controles
     getQuantityControl(index: number): FormControl {
         return this.formArray.at(index).get('quantity') as FormControl;
     }
@@ -105,7 +104,7 @@ export class InvoiceProductDialogComponent {
 
     addProduct(i: number) {
         const detail = this.formArray.at(i).value;
-        this.dialogRef.close(detail);
+        this.selectedDetails.push(detail);
     }
 
     onPage(event: PageEvent) {
@@ -115,6 +114,6 @@ export class InvoiceProductDialogComponent {
     }
 
     close() {
-        this.dialogRef.close();
+        this.dialogRef.close(this.selectedDetails);
     }
 }

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,10 +14,9 @@ import { Customer } from '../../../core/models/customer.model';
 import { AppCustomersService } from '../../../core/services/app-customers.service';
 import { User } from '../../../core/models/user.model';
 import { AppUserService } from '../../../core/services/app-user.service';
-import { Invoice } from '../invoice.model';
 import { MatDialog } from '@angular/material/dialog';
 import { InvoiceProductDialogComponent } from '../invoice-product-dialog/invoice-product-dialog.component';
-import { ProductsService } from '../../products/products.service';
+import { InvoicesService } from '../invoices.service';
 
 @Component({
     selector: 'app-create-or-edit-invoice',
@@ -41,25 +40,29 @@ export class CreateOrEditInvoiceComponent implements OnInit {
     customers: Customer[] = [];
     users: User[] = [];
     vatPercentage = 0;
-    invoiceDetails: any[] = [];
     paymentMethodService = inject(AppPaymentMethodsService);
     private fb = inject(FormBuilder);
     private customersService = inject(AppCustomersService);
     private configurationService = inject(AppConfigurationService);
     private userService = inject(AppUserService);
     private dialog = inject(MatDialog);
-    private productsService = inject(ProductsService);
+    private invoicesService = inject(InvoicesService);
+    get detailsArray() {
+        return this.form.get('details') as import('@angular/forms').FormArray;
+    }
     constructor() {
         this.form = this.fb.group({
-            customer: [''],
-            customerId: 0,
+            customer: ['', Validators.required],
+            customerId: [0, Validators.required],
             customerPhone: [''],
             customerEmail: [''],
             seller: [''],
-            userId: 0,
-            date: [''],
-            paymentMethodId: 0,
-            status: ['41']
+            userId: [0, Validators.required],
+            date: ['', Validators.required],
+            paymentMethodId: [0, Validators.required],
+            status: ['41'],
+            total: 0,
+            details: this.fb.array([], Validators.required)
         });
     }
 
@@ -69,6 +72,19 @@ export class CreateOrEditInvoiceComponent implements OnInit {
         this.getCustomers();
         this.getUsers();
         this.setupFormListeners();
+
+    }
+
+    get detailsSubtotal(): number {
+        return this.detailsArray.controls.reduce((sum, d) => sum + (d.value.total || 0), 0);
+    }
+
+    get detailsIVA(): number {
+        return this.detailsSubtotal * this.vatPercentage / 100;
+    }
+
+    get detailsTotal(): number {
+        return this.detailsSubtotal + this.detailsIVA;
     }
 
     onCustomerSelectOpen() {
@@ -127,17 +143,41 @@ export class CreateOrEditInvoiceComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.form.value);
+        if (this.form.invalid) return;
+        this.form.patchValue({ total: this.detailsTotal }, { emitEvent: false });
+        const payload = this.form.value;
+        console.log('Payload a enviar:', payload);
+        this.invoicesService.create(payload).subscribe({
+            next: (res) => {
+                this.form.reset();
+                this.detailsArray.clear();
+            },
+            error: (err) => {
+                console.error('Error al guardar factura', err);
+            }
+        });
     }
 
     onAddProduct() {
-            const dialogRef = this.dialog.open(InvoiceProductDialogComponent, {
-                width: '1100px'
-            });
-            dialogRef.afterClosed().subscribe((detail: any) => {
-                if (detail) {
-                    this.invoiceDetails.push(detail);
-                }
-            });
+        const dialogRef = this.dialog.open(InvoiceProductDialogComponent, {
+            width: '1100px'
+        });
+        dialogRef.afterClosed().subscribe((details: any[]) => {
+            if (Array.isArray(details)) {
+                details
+                .filter(detail => detail.unitPrice > 0)
+                .forEach(detail => {
+                    this.detailsArray.push(this.fb.group({
+                        productId: [detail.productId],
+                        code: [detail.code],
+                        productName: [detail.productName],
+                        quantity: [detail.quantity],
+                        unitPrice: [detail.unitPrice],
+                        total: [detail.total]
+                    }));
+
+                });
+            }
+        });
     }
 }

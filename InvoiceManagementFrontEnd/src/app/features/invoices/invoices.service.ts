@@ -17,4 +17,7 @@ export class InvoicesService {
         }
         return this.http.get<PagedResult<Invoice>>(`${this.apiUrl}`, { params });
     }
+    create(payload: any): Observable<Invoice> {
+        return this.http.post<Invoice>(`${this.apiUrl}`, payload);
+    }
 }
