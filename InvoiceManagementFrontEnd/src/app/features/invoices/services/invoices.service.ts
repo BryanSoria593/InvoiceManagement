@@ -22,6 +22,14 @@ export class InvoicesService {
         return this.http.post<Invoice>(`${this.apiUrl}`, payload);
     }
 
+    getById(id: number): Observable<Invoice> {
+        return this.http.get<Invoice>(`${this.apiUrl}/${id}`);
+    }
+
+    update(payload: any): Observable<Invoice> {
+        return this.http.put<Invoice>(`${this.apiUrl}`, payload);
+    }
+
     delete(id: number) {
         return this.http.delete(`${this.apiUrl}/${id}`);
     }

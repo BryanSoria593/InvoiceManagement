@@ -15,10 +15,12 @@ export class Invoice {
 
   userId = 0;
   userName: string = '';
+  customerPhone: string = '';
+  customerEmail: string = '';
 
   paymentMethodId = 0;
 
-  invoiceDetails: InvoiceDetail[] = [];
+  details: InvoiceDetail[] = [];
 }
 
 export class InvoiceDetail {

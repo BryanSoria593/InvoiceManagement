@@ -1,6 +1,7 @@
-// PDFMake imports
 import { InvoicePdfService } from '../services/invoice-pdf.service';
 import { Component, inject, OnInit } from '@angular/core';
+import { InvoiceStatus } from '../invoice.model';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,7 +38,7 @@ import { InvoicesService } from '../services/invoices.service';
     styleUrls: ['./create-or-edit-invoice.component.css']
 })
 export class CreateOrEditInvoiceComponent implements OnInit {
-    
+
     form: FormGroup;
     paymentMethods: PaymentMethod[] = [];
     customers: Customer[] = [];
@@ -45,6 +46,12 @@ export class CreateOrEditInvoiceComponent implements OnInit {
     vatPercentage = 0;
     configuration: any;
     paymentMethodService = inject(AppPaymentMethodsService);
+    invoiceStatusOptions = [
+        { value: InvoiceStatus.Active, label: 'Pendiente' },
+        { value: InvoiceStatus.Inactive, label: 'Pagada' }
+    ];
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
     private fb = inject(FormBuilder);
     private customersService = inject(AppCustomersService);
     private configurationService = inject(AppConfigurationService);
@@ -57,15 +64,16 @@ export class CreateOrEditInvoiceComponent implements OnInit {
     }
     constructor() {
         this.form = this.fb.group({
+            id: [0],
             customer: ['', Validators.required],
             customerId: [0, Validators.required],
             customerPhone: [''],
             customerEmail: [''],
             seller: [''],
             userId: [0, Validators.required],
-            date: ['', Validators.required],
+            date: [new Date(), Validators.required],
             paymentMethodId: [0, Validators.required],
-            status: ['41'],
+            status: [InvoiceStatus.Active],
             total: 0,
             details: this.fb.array([], Validators.required)
         });
@@ -78,6 +86,40 @@ export class CreateOrEditInvoiceComponent implements OnInit {
         this.getUsers();
         this.setupFormListeners();
 
+        const id = this.route.snapshot.paramMap.get('id');
+        if (id) {
+            this.invoicesService.getById(+id).subscribe(invoice => {
+                const dateObj = new Date(invoice.date);
+                const formattedDate = this.formatDateForInput(dateObj);
+                this.form.patchValue({
+                    id: invoice.id,
+                    customer: invoice.customerId,
+                    customerEmail : invoice.customerEmail,
+                    customerPhone : invoice.customerPhone,
+                    customerId: invoice.customerId,
+                    seller: invoice.userId,
+                    userId: invoice.userId,
+                    date: formattedDate,
+                    paymentMethodId: invoice.paymentMethodId,
+                    status: invoice.status,
+                    total: invoice.total
+                });
+                this.detailsArray.clear();
+                if (invoice.details && Array.isArray(invoice.details)) {
+                    invoice.details.forEach((d: any) => {
+                        this.detailsArray.push(this.fb.group({
+                            id: [d.id],
+                            productId: [d.productId],
+                            code: [d.code],
+                            productName: [d.productName],
+                            quantity: [d.quantity],
+                            unitPrice: [d.unitPrice],
+                            total: [d.total]
+                        }));
+                    });
+                }
+            });
+        }
     }
 
     get detailsSubtotal(): number {
@@ -167,7 +209,6 @@ export class CreateOrEditInvoiceComponent implements OnInit {
                     customerId: customer.id
                 });
             }
-
         });
 
         this.form.get('seller')?.valueChanges.subscribe((userId: number) => {
@@ -186,15 +227,29 @@ export class CreateOrEditInvoiceComponent implements OnInit {
         this.form.patchValue({ total: this.detailsTotal }, { emitEvent: false });
         const payload = this.form.value;
         console.log('Payload a enviar:', payload);
-        this.invoicesService.create(payload).subscribe({
-            next: (res) => {
-                this.form.reset();
-                this.detailsArray.clear();
-            },
-            error: (err) => {
-                console.error('Error al guardar factura', err);
-            }
-        });
+        if (payload.id && payload.id > 0) {
+            this.invoicesService.update(payload).subscribe({
+                next: (res) => {
+                    this.form.reset();
+                    this.detailsArray.clear();
+                    this.router.navigate(['/invoices']);
+                },
+                error: (err) => {
+                    console.error('Error al actualizar factura', err);
+                }
+            });
+        } else {
+            this.invoicesService.create(payload).subscribe({
+                next: (res) => {
+                    this.form.reset();
+                    this.detailsArray.clear();
+                    this.router.navigate(['/invoices']);
+                },
+                error: (err) => {
+                    console.error('Error al guardar factura', err);
+                }
+            });
+        }
     }
 
     onAddProduct() {
@@ -204,19 +259,26 @@ export class CreateOrEditInvoiceComponent implements OnInit {
         dialogRef.afterClosed().subscribe((details: any[]) => {
             if (Array.isArray(details)) {
                 details
-                .filter(detail => detail.unitPrice > 0)
-                .forEach(detail => {
-                    this.detailsArray.push(this.fb.group({
-                        productId: [detail.productId],
-                        code: [detail.code],
-                        productName: [detail.productName],
-                        quantity: [detail.quantity],
-                        unitPrice: [detail.unitPrice],
-                        total: [detail.total]
-                    }));
+                    .filter(detail => detail.unitPrice > 0)
+                    .forEach(detail => {
+                        this.detailsArray.push(this.fb.group({
+                            productId: [detail.productId],
+                            code: [detail.code],
+                            productName: [detail.productName],
+                            quantity: [detail.quantity],
+                            unitPrice: [detail.unitPrice],
+                            total: [detail.total]
+                        }));
 
-                });
+                    });
             }
         });
+    }
+
+    private formatDateForInput(date: Date): string {
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
     }
 }

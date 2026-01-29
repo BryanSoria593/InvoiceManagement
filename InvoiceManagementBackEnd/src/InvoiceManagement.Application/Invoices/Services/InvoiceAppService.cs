@@ -44,7 +44,7 @@ public class InvoiceAppService : IInvoiceAppService
             UserId = dto.UserId,
             Date = dto.Date,
             PaymentMethodId = dto.PaymentMethodId,
-            Status = Domain.Invoices.Enums.InvoiceStatus.Pending,
+            Status = dto.Status,
             Total = dto.Total,
             Observations = dto.Observations,
             IsDeleted = false,
@@ -70,6 +70,7 @@ public class InvoiceAppService : IInvoiceAppService
         if (invoice == null) throw new Exception($"Invoice with Id {dto.Id} not found");
         invoice.CustomerId = dto.CustomerId;
         invoice.UserId = dto.UserId;
+        invoice.Status = dto.Status;
         invoice.Date = dto.Date;
         invoice.PaymentMethodId = dto.PaymentMethodId;
         invoice.Observations = dto.Observations;
@@ -149,6 +150,8 @@ public class InvoiceAppService : IInvoiceAppService
             CustomerName = i.Customer?.Name ?? string.Empty,
             UserName = i.User?.FirstName ?? string.Empty,
             PaymentMethodName = i.PaymentMethod?.Name ?? string.Empty,
+            CustomerPhone = i.Customer?.Phone ?? string.Empty,
+            CustomerEmail = i.Customer?.Email ?? string.Empty,
             Details = i.InvoiceDetails?.Where(d => !d.IsDeleted).Select(d => new InvoiceDetailDto
             {
                 Id = d.Id,

@@ -94,8 +94,13 @@ export class InvoicesComponent implements OnInit {
         this.router.navigate(['/invoices/create']);
     }
 
-    downloadInvoice(invoice: any): void {
-        console.log('Descargando factura', invoice.id);
+
+    editInvoice(invoice: Invoice) {
+        this.router.navigate(['/invoices/create', invoice.id]);
+    }
+
+    downloadInvoice(invoice: Invoice) {
+
     }
 
 

@@ -66,10 +66,11 @@
           <mat-form-field class="w-100">
             <mat-label>Estado</mat-label>
             <mat-select formControlName="status">
-              <mat-option value="41">Pendiente</mat-option>
-              <mat-option value="42">Pagada</mat-option>
+                @for (s of invoiceStatusOptions; track s.value) {
+                    <mat-option [value]="s.value">{{ s.label }}</mat-option>
+                }
             </mat-select>
-          </mat-form-field>
+           </mat-form-field>
         </div>
       </div>
       <div class="invoice-actions-row">

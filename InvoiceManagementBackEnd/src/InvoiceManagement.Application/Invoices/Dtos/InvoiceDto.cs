@@ -17,6 +17,8 @@ public class InvoiceDto
     public bool IsDeleted { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+    public string CustomerPhone { get; set; } = string.Empty;
+    public string CustomerEmail { get; set; } = string.Empty;
 
     public List<InvoiceDetailDto>? Details { get; set; }
 }
