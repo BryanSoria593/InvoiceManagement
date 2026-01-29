@@ -29,7 +29,6 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
     SearchFilterComponent,
     MatDialogModule,
     MatProgressSpinnerModule,
-    ConfirmDialogComponent,
   ],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
