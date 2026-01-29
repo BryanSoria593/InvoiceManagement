@@ -1,0 +1,53 @@
+.invoice-form-container {
+  max-width: 1200px;
+  margin: 32px auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 24px 32px;
+}
+.invoice-form-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.invoice-form-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+.invoice-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+.invoice-actions-row {
+  display: flex;
+  gap: 12px;
+  margin: 18px 0 12px 0;
+}
+.invoice-table-section {
+  margin-top: 18px;
+}
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0;
+}
+.invoice-table th, .invoice-table td {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 8px 10px;
+  text-align: left;
+}
+.invoice-table th {
+  background: #f5f7fa;
+  font-weight: 600;
+}
+.text-right {
+  text-align: right;
+}

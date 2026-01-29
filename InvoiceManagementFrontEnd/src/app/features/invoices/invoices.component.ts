@@ -9,6 +9,7 @@ import { MenuLayoutComponent } from '../../core/components/menu-layout.component
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { SearchFilterComponent } from '../../shared/components/search-filter/search-filter.component';
 import { debounceTime, Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-invoices',
@@ -35,6 +36,7 @@ export class InvoicesComponent implements OnInit {
     pageSizeOptions = signal<number[]>([5, 10, 20, 50]);
     private filter$ = new Subject<string>();
     private service = inject(InvoicesService);
+    private router = inject(Router);
 
     constructor() {
         this.filter$
@@ -86,6 +88,7 @@ export class InvoicesComponent implements OnInit {
     }
 
     onCreateInvoice() {
+        this.router.navigate(['/invoices/create']);
     }
 
     downloadInvoice(invoice: any): void {

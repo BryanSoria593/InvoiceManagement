@@ -39,9 +39,7 @@ export const routes: Routes = [
     },
     {
         path: 'invoices',
-        loadComponent: () =>
-            import('./features/invoices/invoices.component')
-                .then(m => m.InvoicesComponent)
+        loadChildren: () => import('./features/invoices/routes').then(m => m.default)
     },
     {
         path: 'configuration',
