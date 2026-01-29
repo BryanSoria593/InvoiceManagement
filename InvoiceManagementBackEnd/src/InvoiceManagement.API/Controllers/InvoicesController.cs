@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using InvoiceManagement.Application.Invoices.Interfaces;
 using InvoiceManagement.Application.Invoices.Dtos;
 using System.Collections.Generic;
+using InvoiceManagement.Application.Common.Dtos;
 using Microsoft.AspNetCore.Authorization;
 
 namespace InvoiceManagement.API.Controllers;
@@ -19,10 +20,13 @@ public class InvoicesController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<InvoiceDto>> Get()
+    public ActionResult<PagedResultDto<InvoiceDto>> Get(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? filter = null)
     {
-        var invoices = _invoiceAppService.GetAllInvoices();
-        return Ok(invoices);
+        var result = _invoiceAppService.GetInvoices(pageNumber, pageSize, filter);
+        return Ok(result);
     }
 
     [HttpGet("{id}")]

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using InvoiceManagement.Application.Common.Dtos;
 using InvoiceManagement.Application.Invoices.Dtos;
 using InvoiceManagement.Application.Invoices.Interfaces;
 using InvoiceManagement.Domain.Invoices.Entities;
@@ -19,6 +20,14 @@ public class InvoiceAppService : IInvoiceAppService
     {
         var invoices = _invoiceRepository.GetAll();
         return invoices.Select(MapToDto).ToList();
+    }
+
+    public PagedResultDto<InvoiceDto> GetInvoices(int pageNumber, int pageSize, string? filter = null)
+    {
+        var invoices = _invoiceRepository.GetAll(pageNumber, pageSize, filter);
+        var total = _invoiceRepository.GetTotalCount(filter);
+        var items = invoices.Select(MapToDto).ToList();
+        return new PagedResultDto<InvoiceDto>(items, total);
     }
 
     public InvoiceDto? GetInvoiceById(int id)
@@ -137,10 +146,13 @@ public class InvoiceAppService : IInvoiceAppService
             IsDeleted = i.IsDeleted,
             CreatedAt = i.CreatedAt,
             UpdatedAt = i.UpdatedAt ?? null,
+            CustomerName = i.Customer?.Name ?? string.Empty,
+            UserName = i.User?.FirstName ?? string.Empty,
             Details = i.InvoiceDetails?.Where(d => !d.IsDeleted).Select(d => new InvoiceDetailDto
             {
                 Id = d.Id,
                 ProductId = d.ProductId,
+                ProductCode = d.Product?.Code ?? string.Empty,
                 Quantity = d.Quantity,
                 UnitPrice = d.UnitPrice,
                 Total = d.Total,
