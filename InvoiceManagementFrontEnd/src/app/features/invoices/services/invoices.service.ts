@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Invoice } from './invoice.model';
-import { environment } from '../../../environments/environments';
-import { PagedResult } from '../../shared/models/paged-result.model';
+import { Invoice } from '../invoice.model';
+import { environment } from '../../../../environments/environments';
+import { PagedResult } from '../../../shared/models/paged-result.model';
 
 @Injectable({ providedIn: 'root' })
 export class InvoicesService {

@@ -1,3 +1,5 @@
+// PDFMake imports
+import { InvoicePdfService } from '../services/invoice-pdf.service';
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,7 +18,7 @@ import { User } from '../../../core/models/user.model';
 import { AppUserService } from '../../../core/services/app-user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InvoiceProductDialogComponent } from '../invoice-product-dialog/invoice-product-dialog.component';
-import { InvoicesService } from '../invoices.service';
+import { InvoicesService } from '../services/invoices.service';
 
 @Component({
     selector: 'app-create-or-edit-invoice',
@@ -35,11 +37,13 @@ import { InvoicesService } from '../invoices.service';
     styleUrls: ['./create-or-edit-invoice.component.css']
 })
 export class CreateOrEditInvoiceComponent implements OnInit {
+    
     form: FormGroup;
     paymentMethods: PaymentMethod[] = [];
     customers: Customer[] = [];
     users: User[] = [];
     vatPercentage = 0;
+    configuration: any;
     paymentMethodService = inject(AppPaymentMethodsService);
     private fb = inject(FormBuilder);
     private customersService = inject(AppCustomersService);
@@ -47,6 +51,7 @@ export class CreateOrEditInvoiceComponent implements OnInit {
     private userService = inject(AppUserService);
     private dialog = inject(MatDialog);
     private invoicesService = inject(InvoicesService);
+    private invoicePdfService = inject(InvoicePdfService);
     get detailsArray() {
         return this.form.get('details') as import('@angular/forms').FormArray;
     }
@@ -95,9 +100,39 @@ export class CreateOrEditInvoiceComponent implements OnInit {
         this.getUsers();
     }
 
+    generateInvoicePdf() {
+        const invoice = this.getInvoicePdfData();
+        this.invoicePdfService.generateInvoicePdf(invoice);
+    }
+
+    getInvoicePdfData() {
+        const f = this.form.value;
+        return {
+            number: '',
+            customerName: this.customers.find(c => c.id === f.customer)?.name || '',
+            customerAddress: '',
+            customerPhone: f.customerPhone,
+            customerEmail: f.customerEmail,
+            sellerName: this.users.find(u => u.id === f.userId)?.firstName || '',
+            date: f.date,
+            paymentMethodName: this.paymentMethods.find(p => p.id === f.paymentMethodId)?.name || '',
+            vatPercentage: this.vatPercentage,
+            details: f.details,
+            subtotal: this.detailsSubtotal,
+            iva: this.detailsIVA,
+            total: this.detailsTotal,
+            companyName: this.configuration?.companyName || '',
+            companyAddress: this.configuration?.address || '',
+            companyPhone: this.configuration?.phone || '',
+            companyEmail: this.configuration?.email || '',
+            companyLogo: this.configuration?.base64LogoImage || ''
+        };
+    }
+
     private getConfiguration() {
         this.configurationService.get().subscribe(config => {
             this.vatPercentage = config.vatPercentage || 0;
+            this.configuration = config;
         });
     }
 

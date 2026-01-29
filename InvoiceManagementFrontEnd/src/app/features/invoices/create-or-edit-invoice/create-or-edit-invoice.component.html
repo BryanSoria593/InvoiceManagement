@@ -76,7 +76,7 @@
         <button mat-stroked-button type="button"><mat-icon>add</mat-icon> Nuevo producto</button>
         <button mat-stroked-button type="button"><mat-icon>person_add</mat-icon> Nuevo cliente</button>
         <button mat-stroked-button type="button" (click)="onAddProduct()"><mat-icon>playlist_add</mat-icon> Agregar productos</button>
-        <button mat-stroked-button type="button"><mat-icon>print</mat-icon> Imprimir</button>
+        <button mat-stroked-button type="button" (click)="generateInvoicePdf()"><mat-icon>print</mat-icon> Imprimir</button>
       </div>
       <div class="invoice-table-section">
         <table class="invoice-table">

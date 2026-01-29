@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { InvoicesService } from './invoices.service';
+import { InvoicesService } from './services/invoices.service';
 import { Invoice } from './invoice.model';
 import { MatIcon } from '@angular/material/icon';
 import { MenuLayoutComponent } from '../../core/components/menu-layout.component';
