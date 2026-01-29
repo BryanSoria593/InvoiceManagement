@@ -29,6 +29,7 @@ public class InvoiceRepository : IInvoiceRepository
         IQueryable<Invoice> query = _context.Invoices
             .Where(i => !i.IsDeleted)
             .Include(i => i.Customer)
+            .Include(i => i.PaymentMethod)
             .Include(i => i.User);
 
         if (!string.IsNullOrEmpty(filter))

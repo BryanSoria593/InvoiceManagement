@@ -38,6 +38,12 @@ export const routes: Routes = [
                 .then(m => m.CustomersComponent)
     },
     {
+        path: 'invoices',
+        loadComponent: () =>
+            import('./features/invoices/invoices.component')
+                .then(m => m.InvoicesComponent)
+    },
+    {
         path: 'configuration',
         loadComponent: () =>
             import('./features/configuration/configuration.component')

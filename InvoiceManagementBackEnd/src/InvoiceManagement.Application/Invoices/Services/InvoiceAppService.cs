@@ -148,6 +148,7 @@ public class InvoiceAppService : IInvoiceAppService
             UpdatedAt = i.UpdatedAt ?? null,
             CustomerName = i.Customer?.Name ?? string.Empty,
             UserName = i.User?.FirstName ?? string.Empty,
+            PaymentMethodName = i.PaymentMethod?.Name ?? string.Empty,
             Details = i.InvoiceDetails?.Where(d => !d.IsDeleted).Select(d => new InvoiceDetailDto
             {
                 Id = d.Id,

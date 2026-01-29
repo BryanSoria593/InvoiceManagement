@@ -10,6 +10,7 @@ public class InvoiceDto
     public string UserName { get; set; } = string.Empty;
     public DateTime Date { get; set; }
     public int PaymentMethodId { get; set; }
+    public string PaymentMethodName { get; set; } = string.Empty;
     public InvoiceStatus Status { get; set; }
     public decimal Total { get; set; }
     public string? Observations { get; set; }
