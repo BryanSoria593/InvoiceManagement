@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using InvoiceManagement.Application.Common.Dtos;
 using InvoiceManagement.Application.Customers.Dtos;
 using InvoiceManagement.Application.Customers.Interfaces;
 using InvoiceManagement.Domain.Customers.Entities;
 using InvoiceManagement.Domain.Customers.Interfaces;
 
 namespace InvoiceManagement.Application.Customers.Services;
+
 public class CustomerAppService : ICustomerAppService
 {
     private readonly ICustomerRepository _customerRepository;
@@ -15,10 +17,11 @@ public class CustomerAppService : ICustomerAppService
         _customerRepository = customerRepository;
     }
 
-    public List<CustomerDto> GetAllCustomers()
+    public PagedResultDto<CustomerDto> GetCustomers(int pageNumber, int pageSize, string? filter = null)
     {
-        var customers = _customerRepository.GetAll();
-        return customers.Select(c => new CustomerDto
+        var customers = _customerRepository.GetAll(pageNumber, pageSize, filter);
+        var total = _customerRepository.GetTotalCount(filter);
+        var items = customers.Select(c => new CustomerDto
         {
             Id = c.Id,
             Name = c.Name,
@@ -26,9 +29,11 @@ public class CustomerAppService : ICustomerAppService
             Email = c.Email,
             Address = c.Address,
             CreatedAt = c.CreatedAt,
+            UpdatedAt = c.UpdatedAt,
             Status = c.Status,
             IsDeleted = c.IsDeleted
         }).ToList();
+        return new PagedResultDto<CustomerDto>(items, total);
     }
 
     public CustomerDto? GetCustomerById(int id)

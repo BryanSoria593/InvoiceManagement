@@ -3,6 +3,7 @@ using InvoiceManagement.Application.Customers.Interfaces;
 using InvoiceManagement.Application.Customers.Dtos;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using InvoiceManagement.Application.Common.Dtos;
 
 [Authorize]
 [ApiController]
@@ -17,10 +18,13 @@ public class CustomersController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<CustomerDto>> Get()
+    public ActionResult<PagedResultDto<CustomerDto>> Get(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? filter = null)
     {
-        var customers = _customerAppService.GetAllCustomers();
-        return Ok(customers);
+        var result = _customerAppService.GetCustomers(pageNumber, pageSize, filter);
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
