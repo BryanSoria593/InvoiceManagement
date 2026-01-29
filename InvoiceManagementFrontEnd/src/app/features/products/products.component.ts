@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { MenuLayoutComponent } from '../../core/components/menu-layout.component';
+import { SearchFilterComponent } from '../../shared/components/search-filter/search-filter.component';
 
 @Component({
   selector: 'app-products',
@@ -18,7 +19,8 @@ import { MenuLayoutComponent } from '../../core/components/menu-layout.component
     MatButtonModule,
     DatePipe,
     CurrencyPipe,
-    MenuLayoutComponent
+    MenuLayoutComponent,
+    SearchFilterComponent
   ],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
@@ -33,6 +35,10 @@ export class ProductsComponent implements OnInit {
   total = 0;
 
   constructor(private productsService: ProductsService) {}
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   ngOnInit(): void {
     this.loadProducts();

@@ -4,6 +4,9 @@
       <h2>Productos</h2>
       <button mat-raised-button color="primary">Nuevo Producto</button>
     </div>
+    <div style="margin-bottom: 16px;">
+      <app-search-filter (filterChange)="applyFilter($event)"></app-search-filter>
+    </div>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <ng-container matColumnDef="code">
         <th mat-header-cell *matHeaderCellDef> Código </th>
