@@ -4,5 +4,6 @@ namespace InvoiceManagement.Application.Configuration.Interfaces;
 public interface IConfigurationAppService
 {
     List<ConfigurationDto> GetAllConfigurations();
+    ConfigurationDto? GetSingleConfiguration();
     ConfigurationDto UpdateConfiguration(UpdateConfigurationDto dto);
 }

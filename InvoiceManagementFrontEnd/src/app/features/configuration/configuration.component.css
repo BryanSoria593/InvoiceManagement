@@ -1,0 +1,69 @@
+.config-container {
+  max-width: 960px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  padding: 32px 40px;
+}
+
+h2 {
+  margin: 0 0 24px;
+  font-weight: 500;
+  color: #2c2c2c;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 12px;
+}
+
+.config-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-img {
+  width: 180px;
+  height: 120px;
+  object-fit: contain;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px dashed #dcdcdc;
+  padding: 8px;
+}
+
+.logo-section label {
+  font-size: 13px;
+  color: #666;
+}
+
+.logo-section input[type="file"] {
+  font-size: 13px;
+}
+
+.fields-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.actions button {
+  min-width: 180px;
+}

@@ -14,4 +14,5 @@ public class ConfigurationDto
     public string CurrencySymbol { get; set; } = string.Empty;
     public string LogoUrl { get; set; } = string.Empty;
     public DateTime UpdatedAt { get; set; }
+    public string? Base64LogoImage { get; set; }
 }

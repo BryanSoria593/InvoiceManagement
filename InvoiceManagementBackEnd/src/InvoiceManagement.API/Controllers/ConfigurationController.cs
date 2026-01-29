@@ -17,6 +17,15 @@ public class ConfigurationController : ControllerBase
         _configurationAppService = configurationAppService;
     }
 
+    [HttpGet("single")]
+    public ActionResult<ConfigurationDto> GetSingle()
+    {
+        var config = _configurationAppService.GetSingleConfiguration();
+        if (config == null)
+            return NotFound();
+        return Ok(config);
+    }
+
     [HttpGet]
     public ActionResult<List<ConfigurationDto>> GetAll()
     {

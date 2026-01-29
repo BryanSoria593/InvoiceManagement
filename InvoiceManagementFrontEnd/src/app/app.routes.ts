@@ -38,6 +38,12 @@ export const routes: Routes = [
                 .then(m => m.CustomersComponent)
     },
     {
+        path: 'configuration',
+        loadComponent: () =>
+            import('./features/configuration/configuration.component')
+                .then(m => m.ConfigurationComponent)
+    },
+    {
         path: '**',
         redirectTo: 'login'
     }

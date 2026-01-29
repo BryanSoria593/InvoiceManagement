@@ -12,6 +12,8 @@ using InvoiceManagement.Domain.Invoices.Interfaces;
 using InvoiceManagement.Application.Auth.Interfaces;
 using InvoiceManagement.Application.Auth.Services;
 using InvoiceManagement.Infrastructure.Auth;
+using InvoiceManagement.Application.Common.Interfaces;
+using InvoiceManagement.Infrastructure.FileStorage;
 
 namespace InvoiceManagement.Infrastructure;
 
@@ -36,6 +38,8 @@ public static class DependencyInjection
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+
+        services.AddScoped<IFileStorageService, FileStorageService>();
         return services;
     }
 }

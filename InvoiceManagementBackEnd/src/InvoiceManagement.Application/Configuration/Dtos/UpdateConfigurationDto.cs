@@ -12,4 +12,5 @@ public class UpdateConfigurationDto
     public decimal VatPercentage { get; set; }
     public string CurrencySymbol { get; set; } = string.Empty;
     public string LogoUrl { get; set; } = string.Empty;
+    public string? Base64LogoImage { get; set; }
 }
