@@ -10,9 +10,6 @@ export class ProductsService {
     private readonly http = inject(HttpClient);
     private readonly apiUrl = `${environment.baseUrl}/products`;
 
-  constructor() {}
-
-
   getPaged(pageNumber: number, pageSize: number, filter?: string): Observable<PagedResult<Product>> {
     const params: any = { pageNumber, pageSize };
     if (filter) {
