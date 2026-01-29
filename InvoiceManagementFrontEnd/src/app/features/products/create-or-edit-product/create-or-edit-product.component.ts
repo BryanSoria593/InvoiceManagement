@@ -9,7 +9,7 @@ import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angula
 import { Product } from '../product.model';
 
 @Component({
-  selector: 'app-edit-product',
+  selector: 'app-create-or-edit-product',
   standalone: true,
   imports: [
     CommonModule,
