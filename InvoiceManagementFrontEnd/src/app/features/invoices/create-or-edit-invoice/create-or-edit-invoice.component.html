@@ -1,15 +1,15 @@
 <app-menu-layout>
   <div class="invoice-form-container">
-    <div class="invoice-form-header">
-      <h2><mat-icon>add_circle</mat-icon> Nueva Factura</h2>
-    </div>
-    <button mat-raised-button 
-              color="primary" 
-              type="button"
-              (click)="onSubmit()"
-              [disabled]="!form.valid">
-        <mat-icon>save</mat-icon> Guardar Factura
+    <div class="invoice-actions-row right-actions">
+      <button mat-raised-button 
+                color="primary" 
+                type="button"
+                (click)="onSubmit()"
+                [disabled]="!form.valid">
+          <mat-icon>save</mat-icon> Guardar Factura
       </button>
+      <button mat-stroked-button type="button" (click)="generateInvoicePdf()"><mat-icon>print</mat-icon> Imprimir</button>
+    </div>
     <form [formGroup]="form">
       <div class="invoice-form-grid">
         <div class="form-row">
@@ -73,12 +73,7 @@
            </mat-form-field>
         </div>
       </div>
-      <div class="invoice-actions-row">
-        <button mat-stroked-button type="button"><mat-icon>add</mat-icon> Nuevo producto</button>
-        <button mat-stroked-button type="button"><mat-icon>person_add</mat-icon> Nuevo cliente</button>
-        <button mat-stroked-button type="button" (click)="onAddProduct()"><mat-icon>playlist_add</mat-icon> Agregar productos</button>
-        <button mat-stroked-button type="button" (click)="generateInvoicePdf()"><mat-icon>print</mat-icon> Imprimir</button>
-      </div>
+      <!-- ...existing code... -->
       <div class="invoice-table-section">
         <table class="invoice-table">
           <thead>

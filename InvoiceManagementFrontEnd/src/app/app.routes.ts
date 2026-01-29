@@ -42,6 +42,11 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: 'users',
+        loadChildren: () => import('./features/users/routes').then(m => m.default),
+        canActivate: [authGuard]
+    },
+    {
         path: 'invoices',
         loadChildren: () => import('./features/invoices/routes').then(m => m.default),
         canActivate: [authGuard]

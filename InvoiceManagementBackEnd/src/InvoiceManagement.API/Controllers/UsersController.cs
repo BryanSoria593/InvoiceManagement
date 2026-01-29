@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using InvoiceManagement.Application.Users;
 using InvoiceManagement.Application.Users.Dtos;
+using InvoiceManagement.Application.Common.Dtos;
 
 namespace InvoiceManagement.API.Controllers
 {
@@ -13,6 +14,16 @@ namespace InvoiceManagement.API.Controllers
         public UsersController(IUserAppService userAppService)
         {
             _userAppService = userAppService;
+        }
+
+        [HttpGet("paged")]
+        public ActionResult<PagedResultDto<UserDto>> GetPaged(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? filter = null)
+        {
+            var result = _userAppService.GetUsers(pageNumber, pageSize, filter);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -45,11 +56,5 @@ namespace InvoiceManagement.API.Controllers
             return Ok(user);
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
-        {
-            _userAppService.DeleteUser(id);
-            return NoContent();
-        }
     }
 }

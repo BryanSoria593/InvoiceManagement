@@ -18,6 +18,40 @@ public class UserRepository : IUserRepository
         return _context.Users.FirstOrDefault(u => u.Id == id && !u.IsDeleted);
     }
 
+    public List<User> GetAll(int pageNumber, int pageSize, string? filter = null)
+    {
+        var query = _context.Users.Where(u => !u.IsDeleted);
+        if (!string.IsNullOrEmpty(filter))
+        {
+            query = query.Where(u =>
+                u.FirstName.Contains(filter) ||
+                u.LastName.Contains(filter) ||
+                u.Username.Contains(filter) ||
+                u.Email.Contains(filter)
+            );
+        }
+        return query
+            .OrderBy(u => u.Id)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+    }
+
+    public int GetTotalCount(string? filter = null)
+    {
+        var query = _context.Users.Where(u => !u.IsDeleted);
+        if (!string.IsNullOrEmpty(filter))
+        {
+            query = query.Where(u =>
+                u.FirstName.Contains(filter) ||
+                u.LastName.Contains(filter) ||
+                u.Username.Contains(filter) ||
+                u.Email.Contains(filter)
+            );
+        }
+        return query.Count();
+    }
+
     public List<User> GetAll()
     {
         return _context.Users.Where(u => !u.IsDeleted).ToList();

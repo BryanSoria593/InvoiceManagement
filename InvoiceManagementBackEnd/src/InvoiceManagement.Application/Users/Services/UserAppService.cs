@@ -2,6 +2,7 @@ using InvoiceManagement.Application.Users.Dtos;
 using InvoiceManagement.Domain.Users.Enums;
 using InvoiceManagement.Domain.Users.Interfaces;
 using InvoiceManagement.Domain.Users.Entities;
+using InvoiceManagement.Application.Common.Dtos;
 
 namespace InvoiceManagement.Application.Users
 {
@@ -12,6 +13,22 @@ namespace InvoiceManagement.Application.Users
         public UserAppService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+        }
+
+        public PagedResultDto<UserDto> GetUsers(int pageNumber, int pageSize, string? filter = null)
+        {
+            var users = _userRepository.GetAll(pageNumber, pageSize, filter);
+            var total = _userRepository.GetTotalCount(filter);
+            var items = users.Select(u => new UserDto
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Username = u.Username,
+                Email = u.Email,
+                Status = u.Status
+            }).ToList();
+            return new PagedResultDto<UserDto>(items, total);
         }
 
         public UserDto? GetUserById(int id)
@@ -96,13 +113,5 @@ namespace InvoiceManagement.Application.Users
             };
         }
 
-        public void DeleteUser(int id)
-        {
-            var user = _userRepository.GetById(id);
-            if (user == null) return;
-            user.IsDeleted = true;
-            user.UpdatedAt = DateTime.UtcNow;
-            _userRepository.Update(user);
-        }
     }
 }
