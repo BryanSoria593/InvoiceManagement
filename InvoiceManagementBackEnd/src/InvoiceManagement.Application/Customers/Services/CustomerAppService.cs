@@ -4,6 +4,7 @@ using InvoiceManagement.Application.Common.Dtos;
 using InvoiceManagement.Application.Customers.Dtos;
 using InvoiceManagement.Application.Customers.Interfaces;
 using InvoiceManagement.Domain.Customers.Entities;
+using InvoiceManagement.Domain.Customers.Enums;
 using InvoiceManagement.Domain.Customers.Interfaces;
 
 namespace InvoiceManagement.Application.Customers.Services;
@@ -57,14 +58,14 @@ public class CustomerAppService : ICustomerAppService
 
     public CustomerDto CreateCustomer(CreateCustomerDto dto)
     {
-        var customer = new Domain.Customers.Entities.Customer
+        var customer = new Customer
         {
             Name = dto.Name,
             Phone = dto.Phone,
             Email = dto.Email,
             Address = dto.Address,
             CreatedAt = DateTime.UtcNow,
-            Status = Domain.Customers.Enums.CustomerStatus.Active,
+            Status = CustomerStatus.Active,
             IsDeleted = false
         };
         _customerRepository.Add(customer);
@@ -91,6 +92,7 @@ public class CustomerAppService : ICustomerAppService
         customer.Email = dto.Email;
         customer.Address = dto.Address;
         customer.UpdatedAt = DateTime.UtcNow;
+        customer.Status = dto.Status;
         _customerRepository.Update(customer);
         return new CustomerDto
         {

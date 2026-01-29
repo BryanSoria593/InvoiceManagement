@@ -1,3 +1,5 @@
+using InvoiceManagement.Domain.Customers.Enums;
+
 namespace InvoiceManagement.Application.Customers.Dtos;
 public class UpdateCustomerDto
 {
@@ -7,4 +9,5 @@ public class UpdateCustomerDto
     public string Address { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+    public CustomerStatus Status { get; set; }
 }

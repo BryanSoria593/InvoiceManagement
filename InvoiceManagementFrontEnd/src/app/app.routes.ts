@@ -32,6 +32,12 @@ export const routes: Routes = [
                 .then(m => m.ProductsComponent)
     },
     {
+        path: 'customers',
+        loadComponent: () =>
+            import('./features/customers/customers.component')
+                .then(m => m.CustomersComponent)
+    },
+    {
         path: '**',
         redirectTo: 'login'
     }

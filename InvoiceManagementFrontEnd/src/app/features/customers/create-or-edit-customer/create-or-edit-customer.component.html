@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+<form [formGroup]="form" (ngSubmit)="onSave()" mat-dialog-content>
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="name" [readonly]="readOnly">
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" [readonly]="readOnly">
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>Teléfono</mat-label>
+    <input matInput formControlName="phone" [readonly]="readOnly">
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>Dirección</mat-label>
+    <textarea matInput formControlName="address" [readonly]="readOnly"></textarea>
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>Estado</mat-label>
+    <mat-select formControlName="status">
+      @for (key of (customerStatus | keyvalue); track key.value) {
+        @if (typeof key.value === 'number') {
+          <mat-option [value]="key.value">
+            {{ key.value === customerStatus.Active ? 'Activo' : 'Inactivo' }}
+          </mat-option>
+        }
+      }
+    </mat-select>
+  </mat-form-field>
+  <div mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    @if(!readOnly) {
+        <button mat-raised-button color="primary" type="submit">Guardar</button>
+    }
+  </div>
+</form>
