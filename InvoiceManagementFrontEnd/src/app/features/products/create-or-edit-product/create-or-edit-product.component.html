@@ -16,6 +16,18 @@
     <mat-label>Precio</mat-label>
     <input matInput type="number" formControlName="salePrice" [readonly]="readOnly">
   </mat-form-field>
+  <mat-form-field appearance="fill" class="w-100">
+    <mat-label>Estado</mat-label>
+    <mat-select formControlName="status" [disabled]="readOnly">
+      @for (key of (ProductStatus | keyvalue); track key.value) {
+        @if (typeof key.value === 'number') {
+          <mat-option [value]="key.value">
+            {{ key.value === ProductStatus.Active ? 'Activo' : 'Inactivo' }}
+          </mat-option>
+        }
+      }
+    </mat-select>
+  </mat-form-field>
   <div mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Cancelar</button>
     <button mat-raised-button color="primary" type="submit" *ngIf="!readOnly">Guardar</button>

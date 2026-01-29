@@ -6,7 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Product } from '../product.model';
+import { Product, ProductStatus } from '../product.model';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-create-or-edit-product',
@@ -17,7 +18,8 @@ import { Product } from '../product.model';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSelectModule
   ],
   templateUrl: './create-or-edit-product.component.html',
   styleUrls: ['./create-or-edit-product.component.css']
@@ -31,11 +33,13 @@ export class EditProductComponent {
   readonly readOnly = this.data.readOnly;
   readonly product = this.data.product;
 
+  ProductStatus = ProductStatus;
   form = new FormGroup({
     code: new FormControl(this.product?.code ?? '', { nonNullable: true }),
     name: new FormControl(this.product?.name ?? '', { nonNullable: true, validators: Validators.required }),
     description: new FormControl(this.product?.description ?? '', { nonNullable: true }),
-    salePrice: new FormControl(this.product?.salePrice ?? 0, { nonNullable: true })
+    salePrice: new FormControl(this.product?.salePrice ?? 0, { nonNullable: true }),
+    status: new FormControl(this.product?.status ?? ProductStatus.Active, { nonNullable: true })
   });
 
   constructor() {
