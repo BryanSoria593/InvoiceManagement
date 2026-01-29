@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { ToastService } from '../../../core/services/toast.service';
 import {
   ReactiveFormsModule,
   NonNullableFormBuilder,
@@ -22,7 +23,8 @@ import { LoginRequest } from './login-request.model';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -31,6 +33,7 @@ export class LoginComponent {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
 
   readonly loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -50,7 +53,8 @@ export class LoginComponent {
         this.router.navigateByUrl('/dashboard');
       },
       error: (error) => {
-        console.error('Error de login', error);
+        const msg = error?.error || 'Error de login';
+        this.toast.show(msg);
       }
     });
   }
