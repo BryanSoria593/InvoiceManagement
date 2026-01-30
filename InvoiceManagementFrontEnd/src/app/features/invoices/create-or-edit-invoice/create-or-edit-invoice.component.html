@@ -8,6 +8,7 @@
                 [disabled]="!form.valid">
           <mat-icon>save</mat-icon> Guardar Factura
       </button>
+      <button mat-stroked-button type="button" (click)="onAddProduct()"><mat-icon>playlist_add</mat-icon> Agregar productos</button>
       <button mat-stroked-button type="button" (click)="generateInvoicePdf()"><mat-icon>print</mat-icon> Imprimir</button>
     </div>
     <form [formGroup]="form">
@@ -73,7 +74,6 @@
            </mat-form-field>
         </div>
       </div>
-      <!-- ...existing code... -->
       <div class="invoice-table-section">
         <table class="invoice-table">
           <thead>

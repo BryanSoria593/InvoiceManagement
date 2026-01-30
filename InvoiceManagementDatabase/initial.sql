@@ -20,3 +20,5 @@ INSERT INTO Configuration (
     '',
     GETDATE()
 );
+
+INSERT INTO Users (FirstName, LastName, Username, Email, Password, CreatedAt, Status) VALUES('admin', 'admin', 'admin', 'admin@gmail.com', '$2a$11$JgsHeZ1VLJe7r2B87EkN8.fPZ9qKCVz6RPUmiFPpCpEGR5/ugfXeC', GETDATE(), 1);
